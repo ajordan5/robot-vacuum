@@ -7,8 +7,10 @@ class RobotVacuumSim
 {
 public:
     RobotVacuumSim();
-    btDefaultCollisionConfiguration* collisionConfiguration;
+    btDefaultCollisionConfiguration* collisionConfiguration; // = new btDefaultCollisionConfiguration();
     btDiscreteDynamicsWorld* dynamicsWorld;
+    btTransform startTransform;
+
 };
 
 #endif // ROBOTVACUUMSIM_H

@@ -10,8 +10,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/lib/Debug")
+list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/build3")
 list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/src")
-find_package(Bullet)
+find_package(Bullet) # REQUIRED )
 
 add_library(RobotVacuumSim SHARED
   robotvacuumsim.cpp
