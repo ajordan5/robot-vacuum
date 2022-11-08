@@ -1,16 +1,137 @@
 #ifndef ROBOTVACUUMSIM_H
 #define ROBOTVACUUMSIM_H
 
-#include "btBulletDynamicsCommon.h"
+#define CUBE_HALF_EXTENTS 1
 
-class RobotVacuumSim
+#include "btBulletDynamicsCommon.h"
+#include "BulletDynamics/MLCPSolvers/btDantzigSolver.h"
+#include "BulletDynamics/MLCPSolvers/btMLCPSolver.h"
+#include "C:/bullet3/examples/CommonInterfaces/CommonExampleInterface.h"
+//#include "CommonExampleInterface.h"
+#include "C:/bullet3/examples/CommonInterfaces/CommonRenderInterface.h"
+#include "C:/bullet3/examples/CommonInterfaces/CommonWindowInterface.h"
+#include "C:/bullet3/examples/CommonInterfaces/CommonGUIHelperInterface.h"
+
+class RobotVacuumSim : public CommonExampleInterface
 {
 public:
-    RobotVacuumSim();
-    btDefaultCollisionConfiguration* collisionConfiguration; // = new btDefaultCollisionConfiguration();
-    btDiscreteDynamicsWorld* dynamicsWorld;
+    GUIHelperInterface* m_guiHelper;
+
+    RobotVacuumSim(struct GUIHelperInterface* helper);
+    ~RobotVacuumSim();
+
+    btDefaultCollisionConfiguration* collisionConfiguration;
+    btDiscreteDynamicsWorld* m_dynamicsWorld;
     btTransform startTransform;
 
+    btDiscreteDynamicsWorld* getDynamicsWorld();
+
+    btRigidBody* m_vacuumChassis;
+    btRigidBody* localCreateRigidBody(btScalar mass, const btTransform& worldTransform, btCollisionShape* colSape);
+
+    int m_wheelInstances[3];
+    float wheelRadius{0.5f};
+    float wheelWidth{0.4f};
+    btVector3 wheelDirectionCS0{0, -1, 0};
+    btVector3 wheelAxleCS{-1, 0, 0};
+    float wheelFriction{1000};  //BT_LARGE_FLOAT;
+    float suspensionStiffness{20.f};
+    float suspensionDamping{2.3f};
+    btScalar suspensionRestLength{0.6};
+    float suspensionCompression{4.4f};
+    float rollInfluence{0.1f};
+
+    bool m_useDefaultCamera;
+
+    btAlignedObjectArray<btCollisionShape*> m_collisionShapes;
+
+    class btBroadphaseInterface* m_overlappingPairCache;
+
+    class btCollisionDispatcher* m_dispatcher;
+
+    class btConstraintSolver* m_constraintSolver;
+
+    class btDefaultCollisionConfiguration* m_collisionConfiguration;
+
+    class btTriangleIndexVertexArray* m_indexVertexArrays;
+
+    btVector3* m_vertices;
+
+    btRaycastVehicle::btVehicleTuning m_tuning;
+    btVehicleRaycaster* m_vehicleRayCaster;
+    btRaycastVehicle* m_vehicle;
+    btCollisionShape* m_wheelShape;
+
+    float m_cameraHeight;
+    float m_minCameraDistance;
+    float m_maxCameraDistance;
+
+    virtual void stepSimulation(float deltaTime);
+    float gEngineForce{0.f};
+    float defaultBreakingForce{10.f};
+    float gBreakingForce{100.f};
+    float maxEngineForce{1000.f};
+    float maxBreakingForce{100.f};
+    float gVehicleSteering{0.f};
+    float steeringIncrement{0.04f};
+    float steeringClamp{0.3f};
+
+
+    virtual void resetVehicle();
+
+    virtual void clientResetScene();
+
+    virtual void displayCallback();
+
+    virtual void specialKeyboard(int key, int x, int y);
+
+    virtual void specialKeyboardUp(int key, int x, int y);
+
+    virtual bool mouseMoveCallback(float x, float y)
+    {
+        return false;
+    }
+
+    virtual bool mouseButtonCallback(int button, int state, float x, float y)
+    {
+        return false;
+    }
+
+    virtual bool keyboardCallback(int key, int state);
+
+    virtual void renderScene();
+
+    virtual void physicsDebugDraw(int debugFlags);
+
+    void initPhysics();
+    void exitPhysics();
+    void setupSurroundings();
+    void setupSolver();
+    void setupVehicle();
+
+    virtual void resetCamera();
+
+
+
+};
+
+struct ExampleEntry
+{
+    int m_menuLevel;
+    const char* m_name;
+    const char* m_description;
+    CommonExampleInterface::CreateFunc* m_createFunc;
+    int m_option;
+
+    ExampleEntry(int menuLevel, const char* name)
+        : m_menuLevel(menuLevel), m_name(name), m_description(0), m_createFunc(0), m_option(0)
+    {
+    }
+
+    ExampleEntry(int menuLevel, const char* name, const char* description, CommonExampleInterface::CreateFunc* createFunc, int option = 0)
+        : m_menuLevel(menuLevel), m_name(name), m_description(description), m_createFunc(createFunc), m_option(option)
+    {
+    }
 };
 
 #endif // ROBOTVACUUMSIM_H
