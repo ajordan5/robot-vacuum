@@ -36,6 +36,15 @@ void RobotVacuumSim::resetCamera()
     m_guiHelper->resetCamera(dist, yaw, pitch, targetPos[0], targetPos[1], targetPos[2]);
 }
 
+void RobotVacuumSim::physicsDebugDraw(int debugFlags)
+{
+    if (m_dynamicsWorld && m_dynamicsWorld->getDebugDrawer())
+    {
+        m_dynamicsWorld->getDebugDrawer()->setDebugMode(debugFlags);
+        m_dynamicsWorld->debugDrawWorld();
+    }
+}
+
 void RobotVacuumSim::initPhysics()
 {
 

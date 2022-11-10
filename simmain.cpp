@@ -5,6 +5,7 @@
 
 #include "C:/bullet3/examples/ExampleBrowser/ExampleEntries.h"
 #include "Bullet3Common/b3Logging.h"
+#include "simentries.h"
 
 //#include "../Importers/ImportObjDemo/ImportObjExample.h"
 //#include "../Importers/ImportBsp/ImportBspExample.h"
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
         b3Clock clock;
         args.GetCmdLineArgument("minUpdateTimeMicroSecs", gMinUpdateTimeMicroSecs);
 
-        ExampleEntriesAll examples;
+        SimEntries examples;
         examples.initExampleEntries();
 
         OpenGLExampleBrowser* exampleBrowser = new OpenGLExampleBrowser(&examples);

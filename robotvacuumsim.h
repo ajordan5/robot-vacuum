@@ -7,7 +7,7 @@
 #include "BulletDynamics/MLCPSolvers/btDantzigSolver.h"
 #include "BulletDynamics/MLCPSolvers/btMLCPSolver.h"
 #include "C:/bullet3/examples/CommonInterfaces/CommonExampleInterface.h"
-//#include "CommonExampleInterface.h"
+//#include "CommonInterfaces/CommonExampleInterface.h"
 #include "C:/bullet3/examples/CommonInterfaces/CommonRenderInterface.h"
 #include "C:/bullet3/examples/CommonInterfaces/CommonWindowInterface.h"
 #include "C:/bullet3/examples/CommonInterfaces/CommonGUIHelperInterface.h"
@@ -81,12 +81,6 @@ public:
 
     virtual void clientResetScene();
 
-    virtual void displayCallback();
-
-    virtual void specialKeyboard(int key, int x, int y);
-
-    virtual void specialKeyboardUp(int key, int x, int y);
-
     virtual bool mouseMoveCallback(float x, float y)
     {
         return false;
@@ -115,23 +109,7 @@ public:
 
 };
 
-struct ExampleEntry
-{
-    int m_menuLevel;
-    const char* m_name;
-    const char* m_description;
-    CommonExampleInterface::CreateFunc* m_createFunc;
-    int m_option;
+class CommonExampleInterface* RobotVacuumSimCreateFunc(struct CommonExampleOptions& options);
 
-    ExampleEntry(int menuLevel, const char* name)
-        : m_menuLevel(menuLevel), m_name(name), m_description(0), m_createFunc(0), m_option(0)
-    {
-    }
-
-    ExampleEntry(int menuLevel, const char* name, const char* description, CommonExampleInterface::CreateFunc* createFunc, int option = 0)
-        : m_menuLevel(menuLevel), m_name(name), m_description(description), m_createFunc(createFunc), m_option(option)
-    {
-    }
-};
 
 #endif // ROBOTVACUUMSIM_H
