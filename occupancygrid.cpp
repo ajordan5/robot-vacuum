@@ -51,3 +51,52 @@ int OccupancyGrid::get_cell_index(double x, double y) const
     return matrix_to_array_index(xCoords.size()-1, yCoords.size()-1, col, row);
 
 }
+
+std::vector<int> OccupancyGrid::get_cell_indices_along_ray(double x, double y, double rayAngle, double rayLength) const
+{
+    double checkIncrement{resolution/4};
+    double distanceTraveled{0};
+    std::pair<double, double> checkLocation{x, y};
+    int indexPrev{-1};
+    std::vector<int> indicesReturn;
+
+    while (distanceTraveled <= rayLength)
+    {
+        checkLocation.first = x + distanceTraveled * cos(rayAngle);
+        checkLocation.second = y + distanceTraveled * sin(rayAngle);
+
+        int cellIndex = get_cell_index(checkLocation.first, checkLocation.second);
+
+        if (cellIndex == -1)
+            return indicesReturn;
+
+        if (cellIndex != indexPrev)
+        {
+            indicesReturn.push_back(cellIndex);
+            indexPrev = cellIndex;
+        }
+
+        if (rayLength - distanceTraveled < checkIncrement && rayLength != distanceTraveled)
+            distanceTraveled = rayLength;
+        else
+            distanceTraveled = distanceTraveled + checkIncrement;
+
+    }
+
+    return indicesReturn;
+}
+
+std::pair<double, double> OccupancyGrid::get_cell_center(int idx) const
+{
+    std::pair<int, int> matrixIndices = array_to_matrix_index(xCoords.size()-1, yCoords.size()-1, idx);
+    double xCenter = xCoords(matrixIndices.first ) + resolution/2;
+    double yCenter = yCoords(matrixIndices.second) + resolution/2;
+    return {xCenter, yCenter};
+}
+
+void OccupancyGrid::update_likelihood(double value, double x, double y)
+{
+    int idx = get_cell_index(x, y);
+
+    if (idx != -1) logLikelihoodMap[idx] += value;
+}

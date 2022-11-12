@@ -147,6 +147,48 @@ TEST(OccupancyGridUtils, GivenMatrixIndicesOutOfBounds_ExpectNegativeOneIndex)
     EXPECT_EQ(goldIdx, gridIdx);
 }
 
+TEST(OccupancyGridUtils, GivenArrayIndex_ExpectCorrectMatrixIndices)
+{
+    int arrayIdx{6};
+    int matrixRows{4};
+    int matrixCols{4};
+
+    int goldMatrixX{2};
+    int goldMatrixY{1};
+    std::pair<int, int> goldIndices{goldMatrixX, goldMatrixY};
+    std::pair<int, int> foundIndices = array_to_matrix_index(matrixCols, matrixRows, arrayIdx);
+
+    EXPECT_EQ(goldIndices, foundIndices);
+}
+
+TEST(OccupancyGridUtils, GivenArrayIndex_ExpectCorrectMatrixIndices2)
+{
+    int arrayIdx{12};
+    int matrixRows{7};
+    int matrixCols{3};
+
+    int goldMatrixX{0};
+    int goldMatrixY{4};
+    std::pair<int, int> goldIndices{goldMatrixX, goldMatrixY};
+    std::pair<int, int> foundIndices = array_to_matrix_index(matrixCols, matrixRows, arrayIdx);
+
+    EXPECT_EQ(goldIndices, foundIndices);
+}
+
+TEST(OccupancyGridUtils, GivenArrayIndexOutOfBounds_ExpectNegativeMatrixIndices)
+{
+    int arrayIdx{21};
+    int matrixRows{7};
+    int matrixCols{3};
+
+    int goldMatrixX{-1};
+    int goldMatrixY{-1};
+    std::pair<int, int> goldIndices{goldMatrixX, goldMatrixY};
+    std::pair<int, int> foundIndices = array_to_matrix_index(matrixCols, matrixRows, arrayIdx);
+
+    EXPECT_EQ(goldIndices, foundIndices);
+}
+
 TEST(OccupancyGridGetIndex, GivenAPositionInWorldCoordinates_ExpectCorrectGridIndices)
 {
     OccupancyGrid og{1, 1, 0.2};
@@ -181,4 +223,226 @@ TEST(OccupancyGridGetIndex, GivenAPositionOutsideWorldCoordinates_ExpectNegative
     int gridIdx{og.get_cell_index(x, y)};
 
     EXPECT_EQ(goldIdx, gridIdx);
+}
+
+TEST(OccupancyGridSetLikelihood, GivenAnInitialGrid_ExpectZeroLikelihoods)
+{
+    OccupancyGrid og{22, 13, 0.5};
+
+    std::vector<double> map = og.get_map();
+
+    for (int i = 0; i < map.size(); i++)
+    {
+        EXPECT_EQ(0, map[i]);
+    }
+
+
+}
+
+TEST(OccupancyGridSetLikelihood, GivenAnInitialGridWhenUpdatingValuesOnce_ExpectCorrectValue)
+{
+    OccupancyGrid og{22, 13, 0.5};
+    double value{-20.5};
+    og.update_likelihood(value, 10, 5.3);
+
+    std::vector<double> map = og.get_map();
+
+    EXPECT_EQ(value, map[460]);
+}
+
+TEST(OccupancyGridSetLikelihood, GivenAnInitialGridWhenUpdatingValuesOnce_ExpectCorrectValue2)
+{
+    OccupancyGrid og{4, 4, 1};
+    double value{3};
+    og.update_likelihood(value, 2, 2);
+
+    std::vector<double> map = og.get_map();
+
+    EXPECT_EQ(value, map[10]);
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionAt0Degrees_ExpectCorrectGridIndices)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{5.5};
+    double y{5.5};
+    double rayAngle{0};
+    double rayLength{2};
+
+    std::vector<int> goldIndices = {55, 56, 57};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionAt90Degrees_ExpectCorrectGridIndices)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{5.5};
+    double y{5.5};
+    double rayAngle{M_PI/2};
+    double rayLength{2};
+
+    std::vector<int> goldIndices = {55, 65, 75};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionAt180Degrees_ExpectCorrectGridIndices)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{5.5};
+    double y{5.5};
+    double rayAngle{M_PI};
+    double rayLength{2};
+
+    std::vector<int> goldIndices = {55, 54, 53};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionDifficultDegrees_ExpectCorrectGridIndices)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{5.5};
+    double y{5.5};
+    double rayAngle{3*M_PI/2};
+    double rayLength{2};
+
+    std::vector<int> goldIndices = {55, 45, 35};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionAtDifficultAngle_ExpectCorrectGridIndices)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{2.5};
+    double y{3.5};
+    double rayAngle{-0.588002};
+    double rayLength{3};
+
+    std::vector<int> goldIndices = {32, 33, 23, 24, 14};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionThatGoesOutOfBounds_ExpectCorrectGridIndicesAndNoneOutOfBounds)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{1.7};
+    double y{8.8};
+    double rayAngle{3*M_PI/8};
+    double rayLength{7};
+
+    std::vector<int> goldIndices = {81, 91, 92};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionThatSlightlyEntersACell_ExpectGridIndicesToIncludeThatCell)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{1.249};
+    double y{1.1};
+    double rayAngle{0};
+    double rayLength{0.752};
+
+    std::vector<int> goldIndices = {11, 12};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionThatNearlyEntersACell_ExpectGridIndicesToNotIncludeThatCell)
+{
+    OccupancyGrid og{10, 10, 1};
+    double x{1.25};
+    double y{1.1};
+    double rayAngle{0};
+    double rayLength{0.749};
+
+    std::vector<int> goldIndices = {11};
+    std::vector<int> foundIndices = og.get_cell_indices_along_ray(x, y, rayAngle, rayLength);
+
+    ASSERT_EQ(goldIndices.size() ,foundIndices.size());
+
+    for (int i=0; i<goldIndices.size(); i++)
+    {
+        EXPECT_EQ(goldIndices[i], foundIndices[i]);
+    }
+}
+
+TEST(OccupancyGridGetCellCenter, GivenOccupancyGridIndices_ExpectCorrectGridCenter)
+{
+    OccupancyGrid og{3, 3, 1};
+    int idx{4};
+    std::pair<double, double> goldCenter{1.5, 1.5};
+    std::pair<double, double> foundCenter = og.get_cell_center(idx);
+
+    EXPECT_EQ(goldCenter, foundCenter);
+
+}
+
+TEST(OccupancyGridGetCellCenter, GivenOccupancyGridIndices_ExpectCorrectGridCenter2)
+{
+    OccupancyGrid og{5, 5, 0.5};
+    int idx{22};
+    std::pair<double, double> goldCenter{1.25, 1.25};
+    std::pair<double, double> foundCenter = og.get_cell_center(idx);
+
+    EXPECT_EQ(goldCenter, foundCenter);
+
+}
+
+TEST(OccupancyGridGetCellCenter, GivenOccupancyGridIndices_ExpectCorrectGridCenter3)
+{
+    OccupancyGrid og{3, 3, 0.3};
+    int idx{9};
+    std::pair<double, double> goldCenter{2.85, 0.15};
+    std::pair<double, double> foundCenter = og.get_cell_center(idx);
+
+    EXPECT_NEAR(goldCenter.first, foundCenter.first, eps);
+    EXPECT_NEAR(goldCenter.second, foundCenter.second, eps);
+
 }
