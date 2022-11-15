@@ -54,16 +54,42 @@ target_link_libraries(OMap Eigen3::Eigen)
 list(APPEND CMAKE_PREFIX_PATH "C:/Program Files/GTest")
 find_package(GTest REQUIRED)
 
-add_executable(occupancygrid_unittests)
+#add_executable(occupancygrid_unittests)
 
-target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
-target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
-target_link_libraries(occupancygrid_unittests
-    PRIVATE
-        ${GTEST_LIBRARIES}
-        ${GTEST_MAIN_LIBRARIES}
-        OMap
+#target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
+#target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
+#target_link_libraries(occupancygrid_unittests
+#    PRIVATE
+#        ${GTEST_LIBRARIES}
+#        ${GTEST_MAIN_LIBRARIES}
+#        OMap
+#)
+
+add_executable(App_RobotVacuum
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
 )
+
+target_compile_definitions(App_RobotVacuum PRIVATE ${BULLET_DEFINITIONS})
+target_include_directories(App_RobotVacuum
+    PRIVATE
+    ${BULLET_INCLUDE_DIRS}
+)
+
+target_link_libraries(App_RobotVacuum
+    Qt6::Widgets
+    Qt6::Gui
+    Qt6::3DRender
+    Qt6::3DCore
+    Qt6::3DInput
+    Qt6::3DExtras
+    ${BULLET_LIBRARIES}
+    RobotVacuumSim
+    )
+
+
 #add_executable(App_RobotVacuum
 #    simmain.cpp
 #    simentries.h
