@@ -24,6 +24,8 @@ add_library(RobotVacuumSim STATIC
   robotvacuumsim.h
   vacuum.cpp
   vacuum.h
+  ground.cpp
+  ground.h
 
 )
 

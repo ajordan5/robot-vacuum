@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QtCore>
 #include "btBulletDynamicsCommon.h"
+#include "ground.h"
+#include "vacuum.h"
 #include <Qt3DExtras/QTorusMesh>
 #include <Qt3DExtras/QSphereMesh>
 #include <Qt3DCore/qentity.h>
@@ -38,7 +40,8 @@ private:
   btDiscreteDynamicsWorld* dynamicsWorld;
 
 
-//  Ground* mGround;
+  Ground* mGround;
+  Vacuum* mVacuum;
 //  std::vector<BouncyBall*> bouncyBalls;
   double timeStep;
 

@@ -87,3 +87,31 @@ void Vacuum::setup_graphics()
     mCylinderEntities[0]->setEnabled(true);
 
 }
+
+void Vacuum::update_position()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        m_bodies[i]->getMotionState()->getWorldTransform(trans);
+        trans.getOpenGLMatrix(btMat);
+
+        QMatrix4x4 trans(btMat);
+        trans=trans.transposed();//Converting between opengl column major to Qt row major
+        mTransforms[i]->setMatrix(trans);
+    }
+}
+
+btRigidBody* Vacuum::localCreateRigidBody(btScalar mass, const btTransform& startTransform, btCollisionShape* shape)
+{
+
+        btVector3 localInertia(0, 0, 0);
+        shape->calculateLocalInertia(mass, localInertia);
+
+        btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+        btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
+        btRigidBody* body = new btRigidBody(rbInfo);
+
+        m_ownerWorld->addRigidBody(body);
+
+        return body;
+    }

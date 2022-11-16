@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
   initPhysics();
-//  createWorld();
+  createWorld();
   view->setRootEntity(mRootEntity);
 
 
@@ -84,8 +84,8 @@ MainWindow::~MainWindow()
 {
   delete ui;
 
-//  dynamicsWorld->removeRigidBody(mGround->getRigidBodyPtr());
-//  delete mGround;
+  dynamicsWorld->removeRigidBody(mGround->getRigidBodyPtr());
+  delete mGround;
 
 //  for (int i = 0; i < bouncyBalls.size(); i++)
 //  {
@@ -117,10 +117,14 @@ void MainWindow::initPhysics()
 void MainWindow::createWorld()
 {
 
-//  // This creates and adds the ground to the world.
-//  mGround= new Ground(Qt::white);
-//  dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
-//  mGround->getQEntity()->setParent(mRootEntity);
+  // This creates and adds the ground to the world.
+  mGround= new Ground(Qt::white);
+  dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+  mGround->getQEntity()->setParent(mRootEntity);
+
+  btVector3 initPos(0,0,0);
+  mVacuum = new Vacuum(dynamicsWorld, initPos);
+  mVacuum->getQEntity()->setParent(mRootEntity);
 
 //  // Here is where all the spheres are created.
 //  BouncyBall *ball = new BouncyBall({0,0.0,100}, Qt::red, 100, 10);
