@@ -12,7 +12,7 @@ class Vacuum
 public:
     Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition);
     btRigidBody* get_vehicle_body() {return m_bodies[0];}
-    Qt3DCore::QEntity* getQEntity() {return mCylinderEntities[0];}
+    Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
     void update_position();
 
 private:

@@ -8,9 +8,10 @@
 #include <QColor>
 
 Vacuum::Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition)
-    : m_ownerWorld{ownerWorld }
+    : m_ownerWorld{ownerWorld }, mResetPosition{initalPosition.getX(),initalPosition.getY(),initalPosition.getZ()}
 {
     setup_physics(initalPosition);
+    setup_graphics();
 }
 
 void Vacuum::setup_physics(const btVector3& initalPosition)
@@ -85,6 +86,32 @@ void Vacuum::setup_graphics()
     mCylinderEntities[0]->addComponent(material);
     mCylinderEntities[0]->addComponent(mTransforms[0]);
     mCylinderEntities[0]->setEnabled(true);
+
+    Qt3DExtras::QCylinderMesh* wheelMeshRight = new Qt3DExtras::QCylinderMesh();
+    wheelMeshRight->setRadius(2);
+    wheelMeshRight->setLength(2);
+    QVector3D wheelPosition(0.0, wheelRadius, bodyRadius+halfWheelThickness);
+    mTransforms[1] = new Qt3DCore::QTransform();
+    mTransforms[1]->setTranslation(wheelPosition);
+
+    mCylinderEntities[1] = new Qt3DCore::QEntity();
+    mCylinderEntities[1]->addComponent(wheelMeshRight);
+    mCylinderEntities[1]->addComponent(material);
+    mCylinderEntities[1]->addComponent(mTransforms[1]);
+    mCylinderEntities[1]->setEnabled(true);
+
+    Qt3DExtras::QCylinderMesh* wheelMeshLeft = new Qt3DExtras::QCylinderMesh();
+    wheelMeshLeft->setRadius(2);
+    wheelMeshLeft->setLength(2);
+    QVector3D wheelPositionLeft(0.0, wheelRadius, -bodyRadius-halfWheelThickness);
+    mTransforms[2] = new Qt3DCore::QTransform();
+    mTransforms[2]->setTranslation(wheelPositionLeft);
+
+    mCylinderEntities[2] = new Qt3DCore::QEntity();
+    mCylinderEntities[2]->addComponent(wheelMeshLeft);
+    mCylinderEntities[2]->addComponent(material);
+    mCylinderEntities[2]->addComponent(mTransforms[2]);
+    mCylinderEntities[2]->setEnabled(true);
 
 }
 
