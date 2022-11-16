@@ -22,7 +22,7 @@ private:
     btTypedConstraint* m_joints[2];
     double bodyRadius{5};
     double halfBodyThickness{2};
-    double wheelRadius{2};
+    double wheelRadius{3};
     double halfWheelThickness{1};
 
     btScalar btMat[16];

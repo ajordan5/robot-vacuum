@@ -19,27 +19,29 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     btVector3 vacuumBody(bodyRadius, halfBodyThickness, bodyRadius);
     m_shapes[0] = new btCylinderShape(vacuumBody);
 
-    btVector3 wheelBody(wheelRadius, wheelRadius, halfWheelThickness);
-    m_shapes[1] = new btCylinderShapeZ(wheelBody);
-    m_shapes[2] = new btCylinderShapeZ(wheelBody);
+    btVector3 wheelBody(wheelRadius, halfWheelThickness, wheelRadius);
+    m_shapes[1] = new btCylinderShape(wheelBody);
+    m_shapes[2] = new btCylinderShape(wheelBody);
 
     btTransform offset;
     offset.setIdentity();
     offset.setOrigin(initalPosition);
 
-    btVector3 vRoot = btVector3(btScalar(0.), btScalar(wheelRadius), btScalar(0.));
+    btVector3 vRoot = btVector3(btScalar(0.), btScalar(0.), btScalar(wheelRadius));
     btTransform transform;
     transform.setIdentity();
     transform.setOrigin(vRoot);
+    btVector3 axis(1, 0, 0);
+    transform.setRotation(btQuaternion(axis, M_PI_2));
     m_bodies[0] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[0]);
 
     transform.setIdentity();
-    btVector3 vWheelOrigin = btVector3(btScalar(0.0), btScalar(wheelRadius), btScalar(bodyRadius+halfWheelThickness));
+    btVector3 vWheelOrigin = btVector3(btScalar(0.0), btScalar(bodyRadius+halfWheelThickness), btScalar(wheelRadius));
     transform.setOrigin(vWheelOrigin);
     m_bodies[1] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[1]);
 
     transform.setIdentity();
-    vWheelOrigin = btVector3(btScalar(0.0), btScalar(wheelRadius), btScalar(-bodyRadius-halfWheelThickness));
+    vWheelOrigin = btVector3(btScalar(0.0), btScalar(-bodyRadius-halfWheelThickness), btScalar(wheelRadius));
     transform.setOrigin(vWheelOrigin);
     m_bodies[2] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[2]);
 
@@ -54,7 +56,7 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     btTransform localA, localB;
     localA.setIdentity();
     localB.setIdentity();
-    localA.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(bodyRadius)));
+    localA.setOrigin(btVector3(btScalar(0.), btScalar(bodyRadius), btScalar(0)));
     localB = m_bodies[1]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
     hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[1], localA, localB);
     m_joints[0] = hingeC;
@@ -62,7 +64,7 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
 
     localA.setIdentity();
     localB.setIdentity();
-    localA.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(-bodyRadius)));
+    localA.setOrigin(btVector3(btScalar(0.), btScalar(-bodyRadius), btScalar(0.)));
     localB = m_bodies[2]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
     hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[2], localA, localB);
     m_joints[1] = hingeC;
