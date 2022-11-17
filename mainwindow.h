@@ -6,6 +6,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "ground.h"
 #include "vacuum.h"
+#include "obstacles.h"
 #include <Qt3DExtras/QTorusMesh>
 #include <Qt3DExtras/QSphereMesh>
 #include <Qt3DCore/qentity.h>
@@ -32,17 +33,15 @@ private:
   void timerEvent(QTimerEvent *);
   void setTimeStep(double ts) {timeStep = ts;}
 
-
   btBroadphaseInterface* broadphaseInterface;
   btDefaultCollisionConfiguration* defaultCollisionConfig;
   btCollisionDispatcher* collisionDispatcher;
   btSequentialImpulseConstraintSolver* seqImpConstraintSolver;
   btDiscreteDynamicsWorld* dynamicsWorld;
 
-
   Ground* mGround;
   Vacuum* mVacuum;
-//  std::vector<BouncyBall*> bouncyBalls;
+  Obstacles* mObstacles;
   double timeStep;
 
   void initPhysics();

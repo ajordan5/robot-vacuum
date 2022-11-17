@@ -7,11 +7,13 @@
 #include <Qt3DCore/QTransform>
 #include <QColor>
 
+#include "bulletutils.h"
+
 class Vacuum
 {
 public:
     Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition);
-    btRigidBody* get_vehicle_body() {return m_bodies[0];}
+    btRigidBody** get_vehicle_body() {return m_bodies;}
     Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
     void update_position();
 
@@ -22,7 +24,7 @@ private:
     btTypedConstraint* m_joints[2];
     double bodyRadius{5};
     double halfBodyThickness{2};
-    double wheelRadius{3};
+    double wheelRadius{2.1};
     double halfWheelThickness{1};
 
     btScalar btMat[16];
@@ -34,8 +36,9 @@ private:
 
     void setup_physics(const btVector3& initalPosition);
     void setup_graphics();
-    btRigidBody* localCreateRigidBody(btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
+
 
 };
+
 
 #endif // VACUUM_H

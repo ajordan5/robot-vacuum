@@ -3,7 +3,6 @@
 #include <Qt3DExtras/QPhongMaterial>
 #include <Qt3DCore/qentity.h>
 #include <Qt3DCore/qtransform.h>
-#include <Qt3DExtras/QSphereMesh>
 #include <Qt3DExtras/QCylinderMesh>
 #include <QColor>
 
@@ -33,17 +32,17 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     transform.setOrigin(vRoot);
     btVector3 axis(1, 0, 0);
     transform.setRotation(btQuaternion(axis, M_PI_2));
-    m_bodies[0] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[0]);
+    m_bodies[0] = local_create_rigidBody(m_ownerWorld, btScalar(1.), offset * transform, m_shapes[0]);
 
     transform.setIdentity();
     btVector3 vWheelOrigin = btVector3(btScalar(0.0), btScalar(bodyRadius+halfWheelThickness), btScalar(wheelRadius));
     transform.setOrigin(vWheelOrigin);
-    m_bodies[1] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[1]);
+    m_bodies[1] = local_create_rigidBody(m_ownerWorld, btScalar(1.), offset * transform, m_shapes[1]);
 
     transform.setIdentity();
     vWheelOrigin = btVector3(btScalar(0.0), btScalar(-bodyRadius-halfWheelThickness), btScalar(wheelRadius));
     transform.setOrigin(vWheelOrigin);
-    m_bodies[2] = localCreateRigidBody(btScalar(1.), offset * transform, m_shapes[2]);
+    m_bodies[2] = local_create_rigidBody(m_ownerWorld, btScalar(1.), offset * transform, m_shapes[2]);
 
     for (int i = 0; i < 3; ++i)
     {
@@ -53,20 +52,20 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     }
 
     btHingeConstraint* hingeC;
-    btTransform localA, localB;
-    localA.setIdentity();
-    localB.setIdentity();
-    localA.setOrigin(btVector3(btScalar(0.), btScalar(bodyRadius), btScalar(0)));
-    localB = m_bodies[1]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
-    hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[1], localA, localB);
+    btVector3 pivotA{0, 0, btScalar(-bodyRadius)};
+    btVector3 pivotB{0., 0., 0.};
+    btVector3 axisA{0., 0., -1.};
+    btVector3 axisB{0., 1., 0.};
+    hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[1], pivotA, pivotB, axisA, axisB);
+    hingeC->enableAngularMotor(true, 10, 5);
     m_joints[0] = hingeC;
     m_ownerWorld->addConstraint(m_joints[0], true);
 
-    localA.setIdentity();
-    localB.setIdentity();
-    localA.setOrigin(btVector3(btScalar(0.), btScalar(-bodyRadius), btScalar(0.)));
-    localB = m_bodies[2]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
-    hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[2], localA, localB);
+    pivotA = {0, 0, btScalar(bodyRadius)};
+    axisA = {0, 0, 1};
+    axisB = {0, -1, 0};
+    hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[2], pivotA, pivotB, axisA, axisB);
+    hingeC->enableAngularMotor(true, -10, 5);
     m_joints[1] = hingeC;
     m_ownerWorld->addConstraint(m_joints[1], true);
 
@@ -115,6 +114,8 @@ void Vacuum::setup_graphics()
     mCylinderEntities[2]->addComponent(mTransforms[2]);
     mCylinderEntities[2]->setEnabled(true);
 
+    update_position();
+
 }
 
 void Vacuum::update_position()
@@ -130,17 +131,5 @@ void Vacuum::update_position()
     }
 }
 
-btRigidBody* Vacuum::localCreateRigidBody(btScalar mass, const btTransform& startTransform, btCollisionShape* shape)
-{
 
-        btVector3 localInertia(0, 0, 0);
-        shape->calculateLocalInertia(mass, localInertia);
 
-        btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-        btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
-        btRigidBody* body = new btRigidBody(rbInfo);
-
-        m_ownerWorld->addRigidBody(body);
-
-        return body;
-    }

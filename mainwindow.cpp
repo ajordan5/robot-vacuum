@@ -122,7 +122,10 @@ void MainWindow::createWorld()
     dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
     mGround->getQEntity()->setParent(mRootEntity);
 
-    btVector3 initPos(0,0,0);
+    mObstacles = new Obstacles(dynamicsWorld);
+    mObstacles->getQEntity()[0]->setParent(mRootEntity);
+
+    btVector3 initPos(30,0,0);
     mVacuum = new Vacuum(dynamicsWorld, initPos);
     mVacuum->getQEntity()[0]->setParent(mRootEntity);
     mVacuum->getQEntity()[1]->setParent(mRootEntity);

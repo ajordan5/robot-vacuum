@@ -20,12 +20,16 @@ find_package(Bullet REQUIRED )
 find_package(Qt6 COMPONENTS Widgets Concurrent Gui 3DRender 3DInput 3DExtras 3DCore REQUIRED)
 
 add_library(RobotVacuumSim STATIC
-  robotvacuumsim.cpp
-  robotvacuumsim.h
+#  robotvacuumsim.cpp
+#  robotvacuumsim.h
   vacuum.cpp
   vacuum.h
   ground.cpp
   ground.h
+  obstacles.h
+  obstacles.cpp
+  bulletutils.cpp
+  bulletutils.h
 
 )
 
