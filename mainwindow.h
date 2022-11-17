@@ -10,6 +10,7 @@
 #include <Qt3DExtras/QTorusMesh>
 #include <Qt3DExtras/QSphereMesh>
 #include <Qt3DCore/qentity.h>
+#include <QKeyEvent>
 
 namespace Ui {
 class MainWindow;
@@ -32,6 +33,7 @@ private:
   Ui::MainWindow *ui;
   void timerEvent(QTimerEvent *);
   void setTimeStep(double ts) {timeStep = ts;}
+  void keyPressEvent(QKeyEvent* event);
 
   btBroadphaseInterface* broadphaseInterface;
   btDefaultCollisionConfiguration* defaultCollisionConfig;

@@ -16,12 +16,13 @@ public:
     btRigidBody** get_vehicle_body() {return m_bodies;}
     Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
     void update_position();
+    void drive(int key);
 
 private:
     btDynamicsWorld* m_ownerWorld;
     btCollisionShape* m_shapes[3];
     btRigidBody* m_bodies[3];
-    btTypedConstraint* m_joints[2];
+    btHingeConstraint* m_joints[2];
     double bodyRadius{5};
     double halfBodyThickness{2};
     double wheelRadius{2.1};

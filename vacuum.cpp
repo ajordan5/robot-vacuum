@@ -1,3 +1,8 @@
+#define KEY_UP 16777235
+#define KEY_LEFT 16777234
+#define KEY_DOWN 16777237
+#define KEY_RIGHT 16777236
+
 #include "vacuum.h"
 
 #include <Qt3DExtras/QPhongMaterial>
@@ -57,7 +62,7 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     btVector3 axisA{0., 0., -1.};
     btVector3 axisB{0., 1., 0.};
     hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[1], pivotA, pivotB, axisA, axisB);
-    hingeC->enableAngularMotor(true, 10, 5);
+
     m_joints[0] = hingeC;
     m_ownerWorld->addConstraint(m_joints[0], true);
 
@@ -65,9 +70,12 @@ void Vacuum::setup_physics(const btVector3& initalPosition)
     axisA = {0, 0, 1};
     axisB = {0, -1, 0};
     hingeC = new btHingeConstraint(*m_bodies[0], *m_bodies[2], pivotA, pivotB, axisA, axisB);
-    hingeC->enableAngularMotor(true, -10, 5);
+
     m_joints[1] = hingeC;
     m_ownerWorld->addConstraint(m_joints[1], true);
+
+    m_joints[0]->enableAngularMotor(true, 0, 5);
+    m_joints[1]->enableAngularMotor(true, 0, 5);
 
 }
 
@@ -129,6 +137,36 @@ void Vacuum::update_position()
         trans=trans.transposed();//Converting between opengl column major to Qt row major
         mTransforms[i]->setMatrix(trans);
     }
+}
+
+void Vacuum::drive(int key)
+{
+    switch(key)
+    {
+    case Qt::Key::Key_Up:
+        m_joints[0]->enableAngularMotor(true, 10, 5);
+        m_joints[1]->enableAngularMotor(true, -10, 5);
+        break;
+    case Qt::Key::Key_Down:
+        m_joints[0]->enableAngularMotor(true, -10, 5);
+        m_joints[1]->enableAngularMotor(true, 10, 5);
+        break;
+    case Qt::Key::Key_Left:
+        m_joints[0]->enableAngularMotor(true, 5, 5);
+        m_joints[1]->enableAngularMotor(true, 5, 5);
+        break;
+    case Qt::Key::Key_Right:
+        m_joints[0]->enableAngularMotor(true, -5, 5);
+        m_joints[1]->enableAngularMotor(true, -5, 5);
+        break;
+
+    case Qt::Key_Space:
+        m_joints[0]->enableAngularMotor(true, 0, 5);
+        m_joints[1]->enableAngularMotor(true, 0, 5);
+        break;
+    }
+
+
 }
 
 

@@ -1,14 +1,3 @@
-//-------------------------------------------------------
-// Filename: mainwindow.cpp
-//
-// Description:  The cpp file for the qt5 bullet bouncy ball example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/22/16
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <Qt3DExtras/qt3dwindow.h>
@@ -23,9 +12,10 @@
 #include <Qt3DCore/qtransform.h>
 #include <Qt3DExtras/QPhongMaterial>
 #include <Qt3DExtras/qorbitcameracontroller.h>
-
-
 #include <QGridLayout>
+#include <QDebug>
+#include <iostream>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -58,10 +48,10 @@ MainWindow::MainWindow(QWidget *parent) :
     lightTransform->setTranslation(QVector3D(200.0f, 200.0f, 200.0f));
     lightEntity->addComponent(lightTransform);
 
-    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(mRootEntity);
-    camController->setLinearSpeed( 50.0f );
-    camController->setLookSpeed( 180.0f );
-    camController->setCamera(cameraEntity);
+//    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(mRootEntity);
+//    camController->setLinearSpeed( 50.0f );
+//    camController->setLookSpeed( 180.0f );
+//    camController->setCamera(cameraEntity);
 
 
     timeStep = 1/60.0;
@@ -118,6 +108,7 @@ void MainWindow::createWorld()
 {
 
     // This creates and adds the ground to the world.
+    qInfo() << "creating\n";
     mGround= new Ground(Qt::white);
     dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
     mGround->getQEntity()->setParent(mRootEntity);
@@ -130,24 +121,6 @@ void MainWindow::createWorld()
     mVacuum->getQEntity()[0]->setParent(mRootEntity);
     mVacuum->getQEntity()[1]->setParent(mRootEntity);
     mVacuum->getQEntity()[2]->setParent(mRootEntity);
-
-    //  // Here is where all the spheres are created.
-    //  BouncyBall *ball = new BouncyBall({0,0.0,100}, Qt::red, 100, 10);
-    //  ball->getQEntity()->setParent(mRootEntity);
-    //  bouncyBalls.push_back(ball);
-
-    //  ball = new BouncyBall({0,0,50}, Qt::blue, 50, 10);
-    //  ball->getQEntity()->setParent(mRootEntity);
-    //  bouncyBalls.push_back(ball);
-
-
-    //  // Here, we ask each ball for its btRigidBody*,
-    //  // which is added into the world, free to interact with
-    //  // everything else in the world.
-    //  for (BouncyBall* ball: bouncyBalls)
-    //  {
-    //    dynamicsWorld->addRigidBody(ball->getRigidBodyPtr());
-    //  }
 
 
 }
@@ -163,10 +136,18 @@ void MainWindow::timerEvent(QTimerEvent *)
     mVacuum->update_position();
 
 
-
 }
 void MainWindow::on_actionStart_triggered()
 {
     // And, start the timer.
     startTimer(timeStep * 1000);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    auto key = event->key();
+    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left || key == Qt::Key_Space)
+    {
+        mVacuum->drive(key);
+    }
 }
