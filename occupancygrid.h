@@ -11,6 +11,7 @@ class OccupancyGrid
 {
 public:
     OccupancyGrid(double width, double height, double resolution);
+
     int get_cell_index(double x, double y) const;
     std::pair<double, double> get_cell_center(int xIdx, int yIdx) const;
     Eigen::VectorXd get_x_coords() const;
