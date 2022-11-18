@@ -9,13 +9,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/lib")
-list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/lib/Release")
-#list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/build3/vs2010")
-list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/src")
-list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/examples")
-list(APPEND CMAKE_PREFIX_PATH "C:/eigen-3.4.0/cmake")
-list(APPEND CMAKE_PREFIX_PATH "C:/")
 find_package(Bullet REQUIRED )
 find_package(Qt6 COMPONENTS Widgets Concurrent Gui 3DRender 3DInput 3DExtras 3DCore REQUIRED)
 
@@ -57,19 +50,18 @@ add_library( OMap STATIC
 
 target_link_libraries(OMap Eigen3::Eigen)
 
-list(APPEND CMAKE_PREFIX_PATH "C:/Program Files/GTest")
 find_package(GTest REQUIRED)
 
-#add_executable(occupancygrid_unittests)
+add_executable(occupancygrid_unittests)
 
-#target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
-#target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
-#target_link_libraries(occupancygrid_unittests
-#    PRIVATE
-#        ${GTEST_LIBRARIES}
-#        ${GTEST_MAIN_LIBRARIES}
-#        OMap
-#)
+target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
+target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
+target_link_libraries(occupancygrid_unittests
+    PRIVATE
+        ${GTEST_LIBRARIES}
+        ${GTEST_MAIN_LIBRARIES}
+        OMap
+)
 
 add_executable(App_RobotVacuum
     main.cpp
