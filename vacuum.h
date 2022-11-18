@@ -17,6 +17,7 @@ public:
     Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
     void update_position();
     void drive(int key);
+    void stop();
 
 private:
     btDynamicsWorld* m_ownerWorld;

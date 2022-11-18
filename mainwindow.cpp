@@ -26,7 +26,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Qt3DExtras::Qt3DWindow *view = new Qt3DExtras::Qt3DWindow();
     view->defaultFrameGraph()->setClearColor(QColor(QRgb(0x4d4d9f)));
     QWidget *container = QWidget::createWindowContainer(view);
-    this->setCentralWidget(container);
+    auto layout = new QVBoxLayout();
+    layout->addWidget(container);
+    ui->frame->setLayout(layout);
+//    this->setCentralWidget(container);
 
     mRootEntity = new Qt3DCore::QEntity();
 
@@ -108,7 +111,6 @@ void MainWindow::createWorld()
 {
 
     // This creates and adds the ground to the world.
-    qInfo() << "creating\n";
     mGround= new Ground(Qt::white);
     dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
     mGround->getQEntity()->setParent(mRootEntity);
@@ -131,7 +133,6 @@ void MainWindow::timerEvent(QTimerEvent *)
     // This call updates the world; all the rigid
     // bodies in the world update their translations
     // and rotations.
-
     dynamicsWorld->stepSimulation(timeStep, 10);
     mVacuum->update_position();
 
@@ -146,8 +147,17 @@ void MainWindow::on_actionStart_triggered()
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     auto key = event->key();
-    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left || key == Qt::Key_Space)
+    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left) // TODO is_arrowKey
     {
         mVacuum->drive(key);
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    auto key = event->key();
+    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left) // TODO is_arrowKey
+    {
+        mVacuum->stop();
     }
 }

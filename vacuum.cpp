@@ -159,14 +159,15 @@ void Vacuum::drive(int key)
         m_joints[0]->enableAngularMotor(true, -5, 5);
         m_joints[1]->enableAngularMotor(true, -5, 5);
         break;
-
-    case Qt::Key_Space:
-        m_joints[0]->enableAngularMotor(true, 0, 5);
-        m_joints[1]->enableAngularMotor(true, 0, 5);
-        break;
     }
 
 
+}
+
+void Vacuum::stop()
+{
+    m_joints[0]->enableAngularMotor(true, 0, 5);
+    m_joints[1]->enableAngularMotor(true, 0, 5);
 }
 
 

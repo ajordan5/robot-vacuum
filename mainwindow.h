@@ -34,6 +34,7 @@ private:
   void timerEvent(QTimerEvent *);
   void setTimeStep(double ts) {timeStep = ts;}
   void keyPressEvent(QKeyEvent* event);
+  void keyReleaseEvent(QKeyEvent* event);
 
   btBroadphaseInterface* broadphaseInterface;
   btDefaultCollisionConfiguration* defaultCollisionConfig;
