@@ -13,6 +13,7 @@ class OccupancyGrid
 {
 public:
     OccupancyGrid(double width, double height, double resolution);
+
     int get_cell_index(double x, double y) const;
     std::pair<double, double> get_cell_center(int idx) const;
     std::vector<int> get_cell_indices_along_ray(double x, double y, double rayAngle, double rayLength) const;

@@ -17,17 +17,33 @@ list(APPEND CMAKE_PREFIX_PATH "C:/bullet3/examples")
 list(APPEND CMAKE_PREFIX_PATH "C:/eigen-3.4.0/cmake")
 list(APPEND CMAKE_PREFIX_PATH "C:/")
 find_package(Bullet REQUIRED )
+find_package(Qt6 COMPONENTS Widgets Concurrent Gui 3DRender 3DInput 3DExtras 3DCore REQUIRED)
 
 add_library(RobotVacuumSim STATIC
-  robotvacuumsim.cpp
-  robotvacuumsim.h
+#  robotvacuumsim.cpp
+#  robotvacuumsim.h
+  vacuum.cpp
+  vacuum.h
+  ground.cpp
+  ground.h
+  obstacles.h
+  obstacles.cpp
+  bulletutils.cpp
+  bulletutils.h
 
 )
 
 target_link_directories(RobotVacuumSim PRIVATE ${BULLET_LIBRARY_DIRS})
 target_compile_definitions(RobotVacuumSim PRIVATE ROBOTVACUUMSIM_LIBRARY ${BULLET_DEFINITIONS})
 target_include_directories(RobotVacuumSim  PUBLIC ${BULLET_INCLUDE_DIRS} ${BULLET_PHYSICS_SOURCE_DIR}/examples/ExampleBrowser)
-target_link_libraries(RobotVacuumSim ${BULLET_LIBRARIES})
+target_link_libraries(RobotVacuumSim
+    ${BULLET_LIBRARIES}
+    Qt6::Widgets
+    Qt6::Gui
+    Qt6::3DRender
+    Qt6::3DCore
+    Qt6::3DInput
+    Qt6::3DExtras)
 
 find_package(Eigen3 REQUIRED)
 
@@ -44,16 +60,42 @@ target_link_libraries(OMap Eigen3::Eigen)
 list(APPEND CMAKE_PREFIX_PATH "C:/Program Files/GTest")
 find_package(GTest REQUIRED)
 
-add_executable(occupancygrid_unittests)
+#add_executable(occupancygrid_unittests)
 
-target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
-target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
-target_link_libraries(occupancygrid_unittests
-    PRIVATE
-        ${GTEST_LIBRARIES}
-        ${GTEST_MAIN_LIBRARIES}
-        OMap
+#target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
+#target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
+#target_link_libraries(occupancygrid_unittests
+#    PRIVATE
+#        ${GTEST_LIBRARIES}
+#        ${GTEST_MAIN_LIBRARIES}
+#        OMap
+#)
+
+add_executable(App_RobotVacuum
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
 )
+
+target_compile_definitions(App_RobotVacuum PRIVATE ${BULLET_DEFINITIONS})
+target_include_directories(App_RobotVacuum
+    PRIVATE
+    ${BULLET_INCLUDE_DIRS}
+)
+
+target_link_libraries(App_RobotVacuum
+    Qt6::Widgets
+    Qt6::Gui
+    Qt6::3DRender
+    Qt6::3DCore
+    Qt6::3DInput
+    Qt6::3DExtras
+    ${BULLET_LIBRARIES}
+    RobotVacuumSim
+    )
+
+
 #add_executable(App_RobotVacuum
 #    simmain.cpp
 #    simentries.h
