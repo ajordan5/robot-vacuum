@@ -21,6 +21,8 @@ add_library(RobotVacuumSim STATIC
   ground.h
   obstacles.h
   obstacles.cpp
+  lidar.h
+  lidar.cpp
   bulletutils.cpp
   bulletutils.h
 
@@ -31,6 +33,7 @@ target_compile_definitions(RobotVacuumSim PRIVATE ROBOTVACUUMSIM_LIBRARY ${BULLE
 target_include_directories(RobotVacuumSim  PUBLIC ${BULLET_INCLUDE_DIRS} ${BULLET_PHYSICS_SOURCE_DIR}/examples/ExampleBrowser)
 target_link_libraries(RobotVacuumSim
     ${BULLET_LIBRARIES}
+    Eigen3::Eigen
     Qt6::Widgets
     Qt6::Gui
     Qt6::3DRender
@@ -60,6 +63,7 @@ target_link_libraries(occupancygrid_unittests
     PRIVATE
         ${GTEST_LIBRARIES}
         ${GTEST_MAIN_LIBRARIES}
+        RobotVacuumSim
         OMap
 )
 

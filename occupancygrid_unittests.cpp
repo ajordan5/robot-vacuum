@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
-#include "occupancygrid.h"
 #include <iostream>
+
+#include "occupancygrid.h"
+#include "lidar.h"
+#include "bulletutils.h"
 
 #define eps 0.00000001
 
@@ -108,7 +111,7 @@ TEST(OccupancyGridConstructor, GivenAnInitializedOccupancyGrid_ExpectCorrectYCoo
     vectors_equal(yCoords, goldCoords);
 }
 
-TEST(OccupancyGridGetUtils, GivenMatrixIndices_ExpectCorrectArrayIndex)
+TEST(OccupancyGridUtils, GivenMatrixIndices_ExpectCorrectArrayIndex)
 {
     int matrixX{3};
     int matrixY{4};
@@ -444,5 +447,226 @@ TEST(OccupancyGridGetCellCenter, GivenOccupancyGridIndices_ExpectCorrectGridCent
 
     EXPECT_NEAR(goldCenter.first, foundCenter.first, eps);
     EXPECT_NEAR(goldCenter.second, foundCenter.second, eps);
+
+}
+
+TEST(Lidar, GivenInitLidar_ExpectEquallySpacedRaysAtCorrectAngles)
+{
+    btDynamicsWorld* world{nullptr};
+    Lidar lidar(world, 200, 60, 11);
+
+    Eigen::Vector<double, 11> goldAngles;
+    goldAngles << -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30;
+
+    Eigen::VectorXd foundAngles = lidar.get_angles_degrees();
+    vectors_equal(goldAngles, foundAngles);
+
+}
+
+TEST(Lidar, GivenInitLidar_ExpectEquallySpacedRaysAtCorrectAngles2)
+{
+    btDynamicsWorld* world{nullptr};
+    Lidar lidar(world, 200, 20, 3);
+
+    Eigen::Vector<double, 3> goldAngles;
+    goldAngles << -10, 0, 10;
+
+    Eigen::VectorXd foundAngles = lidar.get_angles_degrees();
+    vectors_equal(goldAngles, foundAngles);
+
+}
+
+TEST(Lidar, GivenInitLidarWith360View_ExpectRaysToNotOverlapAndBeEquallySpaced)
+{
+    btDynamicsWorld* world{nullptr};
+    Lidar lidar(world, 200, 360, 10);
+
+    Eigen::Vector<double, 10> goldAngles;
+    goldAngles << 0, 36, 72, 108, 144, 180, 216 , 252, 288, 324;
+
+    Eigen::VectorXd foundAngles = lidar.get_angles_degrees();
+    vectors_equal(goldAngles, foundAngles);
+
+}
+
+TEST(Lidar, GivenInitLidarWithNegativeView_ExpectInvalidArgException)
+{
+    btDynamicsWorld* world{nullptr};
+
+    EXPECT_THROW({
+            try
+            {
+                Lidar lidar(world, 200, -360, 10);
+            }
+            catch( const std::invalid_argument& e )
+            {
+                EXPECT_STREQ( "Lidar parameters must be positive", e.what() );
+                throw;
+            }
+        }, std::invalid_argument );
+
+
+}
+
+TEST(Lidar, GivenInitLidarWithNegativeNumRays_ExpectInvalidArgException)
+{
+    btDynamicsWorld* world{nullptr};
+
+    EXPECT_THROW({
+            try
+            {
+                Lidar lidar(world, 200, 60, -10);
+            }
+            catch( const std::invalid_argument& e )
+            {
+                EXPECT_STREQ( "Lidar parameters must be positive", e.what() );
+                throw;
+            }
+        }, std::invalid_argument );
+
+
+}
+
+TEST(Lidar, GivenInitLidarWithNegativeRange_ExpectInvalidArgException)
+{
+    btDynamicsWorld* world{nullptr};
+
+    EXPECT_THROW({
+            try
+            {
+                Lidar lidar(world, -200, 360, 10);
+            }
+            catch( const std::invalid_argument& e )
+            {
+                EXPECT_STREQ( "Lidar parameters must be positive", e.what() );
+                throw;
+            }
+        }, std::invalid_argument );
+
+
+}
+
+TEST(SimUtilsDeg2Rad, GivenZeroAngleInDegrees_ExpectCorrectZeroAngleInRadians)
+{
+    double angleDegrees{0};
+    double goldenRadians{0};
+
+    double calulatedRadians = deg_2_rad(angleDegrees);
+
+    EXPECT_EQ(goldenRadians, calulatedRadians);
+}
+
+TEST(SimUtilsDeg2Rad, GivenAngleInDegrees_ExpectCorrectAngleInRadians)
+{
+    double angleDegrees{20};
+    double goldenRadians{M_PI/9};
+
+    double calulatedRadians = deg_2_rad(angleDegrees);
+
+    EXPECT_NEAR(goldenRadians, calulatedRadians, eps);
+}
+
+TEST(SimUtilsDeg2Rad, GivenAngleInDegrees_ExpectCorrectAngleInRadians2)
+{
+    double angleDegrees{-15};
+    double goldenRadians{-M_PI/12};
+
+    double calulatedRadians = deg_2_rad(angleDegrees);
+
+    EXPECT_EQ(goldenRadians, calulatedRadians);
+}
+
+TEST(SimUtilsRayRotate, GivenLocalCoordinateFrameAtIdentityWithRayAnglePair_ExpectCorrectLocalRayRotation)
+{
+    double angleDegrees{-15};
+    btVector3 ray{10, 0, 0};
+    btTransform localFrame;
+    localFrame.setIdentity();
+
+    btVector3 goldenRay{9.659, -2.588, 0};
+    btVector3 rotatedRay = rotate_ray_local(localFrame, ray, angleDegrees);
+
+    for (int i=0; i<3; ++i)
+    {
+        EXPECT_NEAR(goldenRay[i], rotatedRay[i], .001);
+    }
+
+}
+
+TEST(SimUtilsRayRotate, GivenRotatedLocalCoordinateFrameWithRayAnglePair_ExpectCorrectLocalRayRotation)
+{
+    double angleDegrees{-15};
+    btVector3 ray{10, 0, 0};
+    btTransform localFrame;
+    localFrame.setIdentity();
+    btVector3 axis(0, 0, 1);
+    localFrame.setRotation(btQuaternion(axis, M_PI_4));
+
+    btVector3 goldenRay{8.660, 5, 0};
+    btVector3 rotatedRay = rotate_ray_local(localFrame, ray, angleDegrees);
+
+    for (int i=0; i<3; ++i)
+    {
+        EXPECT_NEAR(goldenRay[i], rotatedRay[i], .001);
+    }
+
+}
+
+TEST(SimUtilsRayRotate, GivenNegativeRotatedLocalCoordinateFrameWithRayAnglePair_ExpectCorrectLocalRayRotation)
+{
+    double angleDegrees{-15};
+    btVector3 ray{10, 0, 0};
+    btTransform localFrame;
+    localFrame.setIdentity();
+    btVector3 axis(0, 0, 1);
+    localFrame.setRotation(btQuaternion(axis, -M_PI_2));
+
+    btVector3 goldenRay{-2.588, -9.659, 0};
+    btVector3 rotatedRay = rotate_ray_local(localFrame, ray, angleDegrees);
+
+    for (int i=0; i<3; ++i)
+    {
+        EXPECT_NEAR(goldenRay[i], rotatedRay[i], .001);
+    }
+
+}
+
+TEST(SimUtilsRayRotate, GivenTransformedLocalCoordinateFrameWithRayAnglePair_ExpectCorrectLocalRayRotation)
+{
+    double angleDegrees{-15};
+    btVector3 ray{10, 0, 0};
+    btTransform localFrame;
+    localFrame.setIdentity();
+    btVector3 axis(0, 0, 1);
+    localFrame.setRotation(btQuaternion(axis, M_PI/10));
+    localFrame.setOrigin({1,2,3});
+
+    btVector3 goldenRay{10.986, 2.523, 3};
+    btVector3 rotatedRay = rotate_ray_local(localFrame, ray, angleDegrees);
+
+    for (int i=0; i<3; ++i)
+    {
+        EXPECT_NEAR(goldenRay[i], rotatedRay[i], .001);
+    }
+
+}
+
+TEST(SimUtilsRayRotate, GivenTransformedLocalCoordinateFrameWithRayAnglePair_ExpectCorrectLocalRayRotation2)
+{
+    double angleDegrees{5};
+    btVector3 ray{5, 0, 0};
+    btTransform localFrame;
+    localFrame.setIdentity();
+    btVector3 axis(0, 0, 1);
+    localFrame.setRotation(btQuaternion(axis, M_PI/18));
+    localFrame.setOrigin({-5,2,6});
+
+    btVector3 goldenRay{-0.1704, 3.294, 6};
+    btVector3 rotatedRay = rotate_ray_local(localFrame, ray, angleDegrees);
+
+    for (int i=0; i<3; ++i)
+    {
+        EXPECT_NEAR(goldenRay[i], rotatedRay[i], .001);
+    }
 
 }

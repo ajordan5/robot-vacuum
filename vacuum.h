@@ -8,6 +8,7 @@
 #include <QColor>
 
 #include "bulletutils.h"
+#include "lidar.h"
 
 class Vacuum
 {
@@ -21,20 +22,21 @@ public:
 
 private:
     btDynamicsWorld* m_ownerWorld;
-    btCollisionShape* m_shapes[3];
-    btRigidBody* m_bodies[3];
+    btCollisionShape* m_shapes[4];
+    btRigidBody* m_bodies[4];
     btHingeConstraint* m_joints[2];
     double bodyRadius{5};
     double halfBodyThickness{2};
-    double wheelRadius{2.1};
-    double halfWheelThickness{1};
+    double wheelRadius{2.2};
+    double halfWheelThickness{0.5};
+    Lidar* lidar;
 
     btScalar btMat[16];
     btTransform trans;
 
     QVector3D mResetPosition;
-    Qt3DCore::QTransform *mTransforms[3];
-    Qt3DCore::QEntity *mCylinderEntities[3];
+    Qt3DCore::QTransform *mTransforms[4];
+    Qt3DCore::QEntity *mCylinderEntities[4];
 
     void setup_physics(const btVector3& initalPosition);
     void setup_graphics();

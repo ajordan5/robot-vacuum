@@ -29,12 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     auto layout = new QVBoxLayout();
     layout->addWidget(container);
     ui->frame->setLayout(layout);
-//    this->setCentralWidget(container);
 
     mRootEntity = new Qt3DCore::QEntity();
 
-
-    // Camera
     Qt3DRender::QCamera *cameraEntity = view->camera();
 
     cameraEntity->lens()->setPerspectiveProjection(45.0f, 16.0f/9.0f, 0.1f, 1000.0f);
@@ -51,14 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lightTransform->setTranslation(QVector3D(200.0f, 200.0f, 200.0f));
     lightEntity->addComponent(lightTransform);
 
-//    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(mRootEntity);
-//    camController->setLinearSpeed( 50.0f );
-//    camController->setLookSpeed( 180.0f );
-//    camController->setCamera(cameraEntity);
-
-
     timeStep = 1/60.0;
-
 
     initPhysics();
     createWorld();
@@ -80,12 +70,6 @@ MainWindow::~MainWindow()
     dynamicsWorld->removeRigidBody(mGround->getRigidBodyPtr());
     delete mGround;
 
-    //  for (int i = 0; i < bouncyBalls.size(); i++)
-    //  {
-    //    dynamicsWorld->removeRigidBody(bouncyBalls[i]->getRigidBodyPtr());
-    //    delete bouncyBalls[i];
-    //  }
-
     delete seqImpConstraintSolver;
     delete collisionDispatcher;
     delete defaultCollisionConfig;
@@ -95,9 +79,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::initPhysics()
 {
-    // The BulletWidget owns and controls everything to do with
-    // the dynamics world. This call allocates the solvers
-    // and collision objects, and sets the gravity.
     broadphaseInterface = new btDbvtBroadphase();
     defaultCollisionConfig = new btDefaultCollisionConfiguration();
     collisionDispatcher = new btCollisionDispatcher(defaultCollisionConfig);
@@ -107,10 +88,9 @@ void MainWindow::initPhysics()
 
     dynamicsWorld->setGravity(btVector3(0, 0, -1000));
 }
+
 void MainWindow::createWorld()
 {
-
-    // This creates and adds the ground to the world.
     mGround= new Ground(Qt::white);
     dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
     mGround->getQEntity()->setParent(mRootEntity);
@@ -118,11 +98,12 @@ void MainWindow::createWorld()
     mObstacles = new Obstacles(dynamicsWorld);
     mObstacles->getQEntity()[0]->setParent(mRootEntity);
 
-    btVector3 initPos(30,0,0);
+    btVector3 initPos(10,0,0);
     mVacuum = new Vacuum(dynamicsWorld, initPos);
     mVacuum->getQEntity()[0]->setParent(mRootEntity);
     mVacuum->getQEntity()[1]->setParent(mRootEntity);
     mVacuum->getQEntity()[2]->setParent(mRootEntity);
+    mVacuum->getQEntity()[3]->setParent(mRootEntity);
 
 
 }
@@ -130,17 +111,11 @@ void MainWindow::createWorld()
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
-    // This call updates the world; all the rigid
-    // bodies in the world update their translations
-    // and rotations.
     dynamicsWorld->stepSimulation(timeStep, 10);
     mVacuum->update_position();
-
-
 }
 void MainWindow::on_actionStart_triggered()
 {
-    // And, start the timer.
     startTimer(timeStep * 1000);
 }
 
