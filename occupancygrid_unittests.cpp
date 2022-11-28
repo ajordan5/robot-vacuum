@@ -670,3 +670,26 @@ TEST(SimUtilsRayRotate, GivenTransformedLocalCoordinateFrameWithRayAnglePair_Exp
     }
 
 }
+
+TEST(SimUtilsIsArrowkey, GivenArrowKey_ExpectTrue)
+{
+    std::vector<int> goldenKeys{16777234, 16777235, 16777236, 16777237};
+
+    for (int key : goldenKeys)
+    {
+        EXPECT_TRUE(is_arrowkey(key));
+    }
+
+}
+
+
+TEST(SimUtilsIsArrowkey, GivenNonArrowKeys_ExpectFalse)
+{
+    std::vector<int> nonArrowKeys{1, 2, 3, 36, 200};
+
+    for (int key : nonArrowKeys)
+    {
+        EXPECT_FALSE(is_arrowkey(key));
+    }
+
+}

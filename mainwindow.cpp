@@ -50,70 +50,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timeStep = 1/60.0;
 
-    initPhysics();
-    createWorld();
     view->setRootEntity(mRootEntity);
 
+    mWorld = new World(mRootEntity, timeStep);
 
     QTimer::singleShot(1000, this, SLOT(setup()));
-}
-void MainWindow::setup()
-{
-
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 
-    dynamicsWorld->removeRigidBody(mGround->getRigidBodyPtr());
-    delete mGround;
-
-    delete seqImpConstraintSolver;
-    delete collisionDispatcher;
-    delete defaultCollisionConfig;
-    delete broadphaseInterface;
-    delete dynamicsWorld;
 }
 
-void MainWindow::initPhysics()
+void MainWindow::setup()
 {
-    broadphaseInterface = new btDbvtBroadphase();
-    defaultCollisionConfig = new btDefaultCollisionConfiguration();
-    collisionDispatcher = new btCollisionDispatcher(defaultCollisionConfig);
-    seqImpConstraintSolver = new btSequentialImpulseConstraintSolver;
-    dynamicsWorld = new btDiscreteDynamicsWorld(collisionDispatcher, broadphaseInterface,
-                                                seqImpConstraintSolver, defaultCollisionConfig);
-
-    dynamicsWorld->setGravity(btVector3(0, 0, -1000));
-}
-
-void MainWindow::createWorld()
-{
-    mGround= new Ground(Qt::white);
-    dynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
-    mGround->getQEntity()->setParent(mRootEntity);
-
-    mObstacles = new Obstacles(dynamicsWorld);
-    mObstacles->getQEntity()[0]->setParent(mRootEntity);
-
-    btVector3 initPos(10,0,0);
-    mVacuum = new Vacuum(dynamicsWorld, initPos);
-    mVacuum->getQEntity()[0]->setParent(mRootEntity);
-    mVacuum->getQEntity()[1]->setParent(mRootEntity);
-    mVacuum->getQEntity()[2]->setParent(mRootEntity);
-    mVacuum->getQEntity()[3]->setParent(mRootEntity);
-
 
 }
-
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
-    dynamicsWorld->stepSimulation(timeStep, 10);
-    mVacuum->update_position();
+    mWorld->step();
 }
+
 void MainWindow::on_actionStart_triggered()
 {
     startTimer(timeStep * 1000);
@@ -122,17 +81,17 @@ void MainWindow::on_actionStart_triggered()
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     auto key = event->key();
-    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left) // TODO is_arrowKey
+    if(is_arrowkey(key)) // TODO is_arrowKey
     {
-        mVacuum->drive(key);
+        mWorld->key_press(key);
     }
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     auto key = event->key();
-    if(key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left) // TODO is_arrowKey
+    if(is_arrowkey(key))
     {
-        mVacuum->stop();
+        mWorld->key_release();
     }
 }

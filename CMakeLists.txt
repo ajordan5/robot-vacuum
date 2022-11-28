@@ -23,6 +23,8 @@ add_library(RobotVacuumSim STATIC
   obstacles.cpp
   lidar.h
   lidar.cpp
+  world.h
+  world.cpp
   bulletutils.cpp
   bulletutils.h
 

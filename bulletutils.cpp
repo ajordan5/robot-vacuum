@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 
 #include "bulletutils.h"
+#include <QtCore>
 
 btRigidBody* local_create_rigidBody(btDynamicsWorld* m_ownerWorld, btScalar mass, const btTransform& startTransform, btCollisionShape* shape)
 {
@@ -26,4 +27,9 @@ btVector3 rotate_ray_local(const btTransform& localFrame, const btVector3& ray, 
 double deg_2_rad(double angleDegrees)
 {
     return angleDegrees*M_PI/180;
+}
+
+bool is_arrowkey(int key)
+{
+    return (key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Right || key == Qt::Key_Left);
 }

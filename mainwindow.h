@@ -3,14 +3,11 @@
 
 #include <QMainWindow>
 #include <QtCore>
-#include "btBulletDynamicsCommon.h"
-#include "ground.h"
-#include "vacuum.h"
-#include "obstacles.h"
 #include <Qt3DExtras/QTorusMesh>
 #include <Qt3DExtras/QSphereMesh>
 #include <Qt3DCore/qentity.h>
 #include <QKeyEvent>
+#include "world.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,22 +33,12 @@ private:
   void keyPressEvent(QKeyEvent* event);
   void keyReleaseEvent(QKeyEvent* event);
 
-  btBroadphaseInterface* broadphaseInterface;
-  btDefaultCollisionConfiguration* defaultCollisionConfig;
-  btCollisionDispatcher* collisionDispatcher;
-  btSequentialImpulseConstraintSolver* seqImpConstraintSolver;
-  btDiscreteDynamicsWorld* dynamicsWorld;
+//  void setup_3D_world();
+//  void setup_camera();
 
-  Ground* mGround;
-  Vacuum* mVacuum;
-  Obstacles* mObstacles;
   double timeStep;
+  World* mWorld;
 
-  void initPhysics();
-  void createWorld();
-
-  Qt3DExtras::QSphereMesh *mSphere;
-  Qt3DCore::QEntity *mSphereEntity;
   Qt3DCore::QEntity *mRootEntity;
 
 };
