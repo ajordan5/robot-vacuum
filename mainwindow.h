@@ -7,6 +7,7 @@
 #include <Qt3DExtras/QSphereMesh>
 #include <Qt3DCore/qentity.h>
 #include <QKeyEvent>
+#include <Qt3DExtras/qt3dwindow.h>
 #include "world.h"
 
 namespace Ui {
@@ -33,14 +34,14 @@ private:
   void keyPressEvent(QKeyEvent* event);
   void keyReleaseEvent(QKeyEvent* event);
 
-//  void setup_3D_world();
-//  void setup_camera();
+  void setup_3D_world();
+  void setup_camera();
 
-  double timeStep;
+  double timeStep{1/60.0};
   World* mWorld;
 
   Qt3DCore::QEntity *mRootEntity;
-
+  Qt3DExtras::Qt3DWindow* view;
 };
 
 #endif // MAINWINDOW_H

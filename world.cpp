@@ -61,6 +61,7 @@ void World::step()
 {
     dynamicsWorld->stepSimulation(timeStep, 10);
     mVacuum->update_position();
+    mVacuum->update_measurements();
 }
 
 void World::key_press(int key)

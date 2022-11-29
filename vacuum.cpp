@@ -175,6 +175,10 @@ void Vacuum::update_position()
         mTransforms[i]->setMatrix(trans);
     }
 
+}
+
+void Vacuum::update_measurements()
+{
     m_bodies[3]->getMotionState()->getWorldTransform(trans);
     lidar->get_intersections_angle_and_distance(trans);
 }

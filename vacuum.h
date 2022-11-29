@@ -17,6 +17,7 @@ public:
     btRigidBody** get_vehicle_body() {return m_bodies;}
     Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
     void update_position();
+    void update_measurements();
     void drive(int key);
     void stop();
 
