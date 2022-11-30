@@ -94,9 +94,8 @@ std::pair<double, double> OccupancyGrid::get_cell_center(int idx) const
     return {xCenter, yCenter};
 }
 
-void OccupancyGrid::update_likelihood(double value, double x, double y)
+void OccupancyGrid::update_likelihood(double value, int idx)
 {
-    int idx = get_cell_index(x, y);
 
-    if (idx != -1) logLikelihoodMap[idx] += value;
+    if (idx >= 0 || idx < logLikelihoodMap.size()) logLikelihoodMap[idx] += value;
 }

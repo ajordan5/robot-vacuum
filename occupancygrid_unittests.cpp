@@ -319,22 +319,22 @@ TEST(OccupancyGridSetLikelihood, GivenAnInitialGridWhenUpdatingValuesOnce_Expect
 {
     OccupancyGrid og{22, 13, 0.5};
     double value{-20.5};
-    og.update_likelihood(value, 10, 5.3);
+    og.update_likelihood(value, 10);
 
     std::vector<double> map = og.get_map();
 
-    EXPECT_EQ(value, map[460]);
+    EXPECT_EQ(value, map[10]);
 }
 
 TEST(OccupancyGridSetLikelihood, GivenAnInitialGridWhenUpdatingValuesOnce_ExpectCorrectValue2)
 {
     OccupancyGrid og{4, 4, 1};
     double value{3};
-    og.update_likelihood(value, 2, 2);
+    og.update_likelihood(value, 2);
 
     std::vector<double> map = og.get_map();
 
-    EXPECT_EQ(value, map[10]);
+    EXPECT_EQ(value, map[2]);
 }
 
 TEST(OccupancyGetCellsOnRay, GivenARayFromAStartingPositionAt0Degrees_ExpectCorrectGridIndices)

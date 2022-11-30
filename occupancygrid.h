@@ -23,7 +23,7 @@ public:
     double get_width() const;
     double get_height() const;
     double get_resolution() const;
-    void update_likelihood(double value, double x, double y);
+    void update_likelihood(double value, int index);
 
 protected:
     double width;
