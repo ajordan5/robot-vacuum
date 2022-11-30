@@ -17,6 +17,7 @@ public:
     void add_measurements_to_map(const std::pair<Eigen::VectorXd, Eigen::VectorXd>& rayAngleLengthPairs, const VehicleState& state);
     const unsigned char* get_image() const;
 
+private:
     void integrate_cells_along_ray(const std::vector<int>& cellIndices, const VehicleState& state, double rayLength);
     double inverse_lidar_model(double cellDistance, double rayLength);
 
