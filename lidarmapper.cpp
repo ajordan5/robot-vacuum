@@ -1,7 +1,7 @@
 #include "lidarmapper.h"
 
 LidarMapper::LidarMapper(double maxRange, double width, double height, double resolution)
-    : lidarRange{maxRange}
+    : lidarRange{maxRange}, mapResolution{resolution}
 {
     logOddsFree = probability_to_logodds(probabiltyFree);
     logOddsOccup = probability_to_logodds(probabiltyPrior);
@@ -34,4 +34,13 @@ void LidarMapper::integrate_cells_along_ray(const std::vector<int>& cellIndices,
 
 
     }
+}
+
+double LidarMapper::inverse_lidar_model(double cellDistance, double rayLength)
+{
+    if (rayLength == lidarRange) return logOddsFree;
+    else if (cellDistance <= rayLength - mapResolution/2) return logOddsFree;
+    else if (cellDistance > rayLength - mapResolution/2 && cellDistance < rayLength + mapResolution/2) return logOddsOccup;
+    else return logOddsPrior;
+
 }
