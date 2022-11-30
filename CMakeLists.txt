@@ -12,9 +12,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Bullet REQUIRED )
 find_package(Qt6 COMPONENTS Widgets Concurrent Gui 3DRender 3DInput 3DExtras 3DCore REQUIRED)
 
+find_package(Eigen3 REQUIRED)
+
+add_library( OMap STATIC
+  occupancygrid.cpp
+  occupancygrid.h
+  occupancygridutils.cpp
+  occupancygridutils.h
+  lidarmapper.h
+  lidarmapper.cpp
+
+)
+
+target_link_libraries(OMap Eigen3::Eigen)
+
 add_library(RobotVacuumSim STATIC
-#  robotvacuumsim.cpp
-#  robotvacuumsim.h
   vacuum.cpp
   vacuum.h
   ground.cpp
@@ -41,19 +53,8 @@ target_link_libraries(RobotVacuumSim
     Qt6::3DRender
     Qt6::3DCore
     Qt6::3DInput
-    Qt6::3DExtras)
-
-find_package(Eigen3 REQUIRED)
-
-add_library( OMap STATIC
-  occupancygrid.cpp
-  occupancygrid.h
-  occupancygridutils.cpp
-  occupancygridutils.h
-
-)
-
-target_link_libraries(OMap Eigen3::Eigen)
+    Qt6::3DExtras
+    OMap)
 
 find_package(GTest REQUIRED)
 

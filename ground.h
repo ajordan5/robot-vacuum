@@ -1,14 +1,3 @@
-//-------------------------------------------------------
-// Filename: Ground.h
-//
-// Description:  The h file for the qt vtk bullet bouncy ball example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/22/16
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
 
 #ifndef GROUND_H
 #define GROUND_H
@@ -23,8 +12,8 @@ class Ground
 public:
   Ground();
   Ground(QColor color);
-  btRigidBody* getRigidBodyPtr() {return mRigidBody;}
-  Qt3DCore::QEntity* getQEntity() {return mPlaneEntity;}
+  btRigidBody* getRigidBodyPtr() const {return mRigidBody;}
+  Qt3DCore::QEntity* getQEntity() const {return mPlaneEntity;}
   void update_position();
 
 private:

@@ -192,6 +192,68 @@ TEST(OccupancyGridUtils, GivenArrayIndexOutOfBounds_ExpectNegativeMatrixIndices)
     EXPECT_EQ(goldIndices, foundIndices);
 }
 
+TEST(OccupancyGridUtils, GivenEvenProbability_ExpectZeroLogOdds)
+{
+    double prob{0.5};
+    double goldLog{0};
+
+    double calculatedLog = probability_to_logodds(prob);
+
+    EXPECT_EQ(goldLog, calculatedLog);
+}
+
+TEST(OccupancyGridUtils, GivenZeroLogOdds_ExpectEvenProbability)
+{
+    double logodds{0};
+    double goldProb{0.5};
+
+    double calculatedProb = logodds_to_probability(logodds);
+
+    EXPECT_EQ(goldProb, calculatedProb);
+}
+
+TEST(OccupancyGridUtils, GivenSomeProbability_ExpectCorrectLogOdds)
+{
+    double prob{0.87};
+    double goldLog{1.90095876119};
+
+    double calculatedLog = probability_to_logodds(prob);
+
+    EXPECT_NEAR(goldLog, calculatedLog, eps);
+}
+
+TEST(OccupancyGridUtils, GivenSomeLogOdds_ExpectCorrectProbability)
+{
+    double logodds{-3.2};
+    double goldProb{0.0391657227968};
+
+    double calculatedProb = logodds_to_probability(logodds);
+
+    EXPECT_NEAR(goldProb, calculatedProb, eps);
+}
+
+TEST(OccupancyGridUtils, GivenTwoIdenticalPoints_ExpectZeroDDistance)
+{
+    std::pair<double, double> positionA{1,1};
+    std::pair<double, double> positionB{1,1};
+
+    double goldenDist{0};
+    double calculatedDist{dist_between_2_points_2D(positionA, positionB)};
+
+    EXPECT_EQ(goldenDist, calculatedDist);
+}
+
+TEST(OccupancyGridUtils, GivenTwoPoints_ExpectCorrect2DDistance)
+{
+    std::pair<double, double> positionA{1,1};
+    std::pair<double, double> positionB{7,3};
+
+    double goldenDist{6.32455532};
+    double calculatedDist{dist_between_2_points_2D(positionA, positionB)};
+
+    EXPECT_NEAR(goldenDist, calculatedDist, eps);
+}
+
 TEST(OccupancyGridGetIndex, GivenAPositionInWorldCoordinates_ExpectCorrectGridIndices)
 {
     OccupancyGrid og{1, 1, 0.2};
@@ -692,4 +754,86 @@ TEST(SimUtilsIsArrowkey, GivenNonArrowKeys_ExpectFalse)
         EXPECT_FALSE(is_arrowkey(key));
     }
 
+}
+
+TEST(SimUtilsHeading, GivenIdentityMatrix_ExpectZeroHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    double goldenHeading{0};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_EQ(goldenHeading, calculatedHeading);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, M_PI/10));
+    double goldenHeading{M_PI/10};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ180Degrees_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, M_PI-.00001));
+    double goldenHeading{M_PI};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ90Degrees_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, M_PI_2));
+    double goldenHeading{M_PI_2};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByLargeAngle_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, 15*M_PI/8));
+    double goldenHeading{-M_PI/8};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByNegativeAngle_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, -M_PI/8));
+    double goldenHeading{-M_PI/8};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
+}
+
+TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByLargeNegativeAngle_ExpectCorrectHeading)
+{
+    btTransform trans;
+    trans.setIdentity();
+    btVector3 axis{0,0,1};
+    trans.setRotation(btQuaternion(axis, -26*M_PI/8));
+    double goldenHeading{3*M_PI_4};
+    double calculatedHeading{heading_of_z_rotation(trans)};
+
+    EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }

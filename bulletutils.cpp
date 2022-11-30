@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 
 #include "bulletutils.h"
+#include "occupancygridutils.h"
 #include <QtCore>
 
 btRigidBody* local_create_rigidBody(btDynamicsWorld* m_ownerWorld, btScalar mass, const btTransform& startTransform, btCollisionShape* shape)
@@ -24,9 +25,12 @@ btVector3 rotate_ray_local(const btTransform& localFrame, const btVector3& ray, 
     return localFrame*rotated;
 }
 
-double deg_2_rad(double angleDegrees)
+double heading_of_z_rotation(btTransform trans)
 {
-    return angleDegrees*M_PI/180;
+    btMatrix3x3 rotation{trans.getBasis()};
+    double sinTh{rotation[1][0]};
+    double cosTh{rotation[1][1]};
+    return atan2(sinTh, cosTh);
 }
 
 bool is_arrowkey(int key)

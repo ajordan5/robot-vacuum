@@ -9,9 +9,9 @@ class Lidar
 {
 public:
     Lidar(btDynamicsWorld* ownerWorld, double range, double viewAngleDegrees, int numRays);
-    double get_max_range(){return maxRange;}
+    double get_max_range() const {return maxRange;}
     std::pair<Eigen::VectorXd, Eigen::VectorXd> get_intersections_angle_and_distance(btTransform state);
-    Eigen::VectorXd get_angles_degrees(){return anglesDegrees;};
+    Eigen::VectorXd get_angles_degrees() const {return anglesDegrees;};
     void draw_rays();
 
 private:

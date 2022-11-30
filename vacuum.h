@@ -9,6 +9,7 @@
 
 #include "bulletutils.h"
 #include "lidar.h"
+#include "lidarmapper.h"
 
 class Vacuum
 {
@@ -16,10 +17,13 @@ public:
     Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition);
     btRigidBody** get_vehicle_body() {return m_bodies;}
     Qt3DCore::QEntity** getQEntity() {return mCylinderEntities;}
+    double get_lidar_range() {return lidarRange;}
     void update_position();
-    void update_measurements();
+    std::pair<Eigen::VectorXd, Eigen::VectorXd> update_measurements();
+    double get_heading();
+    VehicleState get_state();
     void drive(int key);
-    void stop();
+    void stop();    
 
 private:
     btDynamicsWorld* m_ownerWorld;
@@ -30,7 +34,9 @@ private:
     double halfBodyThickness{2};
     double wheelRadius{2.2};
     double halfWheelThickness{0.5};
+    double lidarRange{20};
     Lidar* lidar;
+    VehicleState state;
 
     btScalar btMat[16];
     btTransform trans;

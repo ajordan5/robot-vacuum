@@ -15,7 +15,7 @@
 Vacuum::Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition)
     : m_ownerWorld{ownerWorld }, mResetPosition{initalPosition.getX(),initalPosition.getY(),initalPosition.getZ()}
 {
-    lidar = new Lidar(m_ownerWorld, 200, 30, 3);
+    lidar = new Lidar(m_ownerWorld, lidarRange, 60, 5);
     setup_physics(initalPosition);
     setup_graphics();
 
@@ -171,16 +171,32 @@ void Vacuum::update_position()
         trans.getOpenGLMatrix(btMat);
 
         QMatrix4x4 trans(btMat);
-        trans=trans.transposed();//Converting between opengl column major to Qt row major
+        trans=trans.transposed();
         mTransforms[i]->setMatrix(trans);
     }
 
 }
 
-void Vacuum::update_measurements()
+std::pair<Eigen::VectorXd, Eigen::VectorXd> Vacuum::update_measurements()
 {
     m_bodies[3]->getMotionState()->getWorldTransform(trans);
-    lidar->get_intersections_angle_and_distance(trans);
+    return lidar->get_intersections_angle_and_distance(trans);
+}
+
+double Vacuum::get_heading()
+{
+    m_bodies[3]->getMotionState()->getWorldTransform(trans);
+    return heading_of_z_rotation(trans);
+}
+
+VehicleState Vacuum::get_state()
+{
+    btVector3 position = trans.getOrigin();
+    state.x = position[0];
+    state.y = position[1];
+    state.heading = get_heading();
+
+    return state;
 }
 
 void Vacuum::drive(int key)
@@ -204,7 +220,6 @@ void Vacuum::drive(int key)
         m_joints[1]->enableAngularMotor(true, -5, 50);
         break;
     }
-
 
 }
 

@@ -5,7 +5,7 @@ World::World(Qt3DCore::QEntity* rootEntity, double simTimeStep)
 {
     init_physics();
     create_world();
-
+    map = new LidarMapper(mVacuum->get_lidar_range(), 1000, 1000, 1);
 }
 
 World::~World()
@@ -61,15 +61,24 @@ void World::step()
 {
     dynamicsWorld->stepSimulation(timeStep, 10);
     mVacuum->update_position();
-    mVacuum->update_measurements();
+    pass_measurements_to_map();
+
 }
 
-void World::key_press(int key)
+void World::pass_measurements_to_map()
+{
+    std::pair<Eigen::VectorXd, Eigen::VectorXd> measurements = mVacuum->update_measurements();
+    VehicleState vehicleState{mVacuum->get_state()};
+    map->add_measurements_to_map(measurements, vehicleState);
+
+}
+
+void World::key_press(int key) const
 {
     mVacuum->drive(key);
 }
 
-void World::key_release()
+void World::key_release() const
 {
     mVacuum->stop();
 }

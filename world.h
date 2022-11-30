@@ -6,6 +6,7 @@
 #include "ground.h"
 #include "vacuum.h"
 #include "obstacles.h"
+#include "lidarmapper.h"
 
 class World
 {
@@ -14,17 +15,19 @@ public:
     ~World();
 
     void step();
-    void key_press(int key);
-    void key_release();
+    void key_press(int key) const;
+    void key_release() const;
 
 private:
     void init_physics();
     void create_world();
+    void pass_measurements_to_map();
 
     Qt3DCore::QEntity* mRootEntity;
     Ground* mGround;
     Vacuum* mVacuum;
     Obstacles* mObstacles;
+    LidarMapper* map;
     double timeStep;
 
     btBroadphaseInterface* broadphaseInterface;
