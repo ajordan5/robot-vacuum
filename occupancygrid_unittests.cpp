@@ -254,6 +254,17 @@ TEST(OccupancyGridUtils, GivenTwoPoints_ExpectCorrect2DDistance)
     EXPECT_NEAR(goldenDist, calculatedDist, eps);
 }
 
+TEST(OccupancyGridUtils, GivenTwoPoints_ExpectCorrect2DDistance2)
+{
+    std::pair<double, double> positionA{10.7,15.3};
+    std::pair<double, double> positionB{7.4,3.1};
+
+    double goldenDist{12.638433447};
+    double calculatedDist{dist_between_2_points_2D(positionA, positionB)};
+
+    EXPECT_NEAR(goldenDist, calculatedDist, eps);
+}
+
 TEST(OccupancyGridGetIndex, GivenAPositionInWorldCoordinates_ExpectCorrectGridIndices)
 {
     OccupancyGrid og{1, 1, 0.2};
