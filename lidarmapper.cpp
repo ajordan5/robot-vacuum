@@ -9,6 +9,7 @@ LidarMapper::LidarMapper(double maxRange, double width, double height, double re
 
     gridMap = new OccupancyGrid(width, height, resolution);
     imageBuffer.resize(gridMap->get_map().size());
+    set_inital_image();
 
 }
 
@@ -34,6 +35,7 @@ void LidarMapper::integrate_cells_along_ray(const std::vector<int>& cellIndices,
         double distance = dist_between_2_points_2D(cellCenter, {state.x, state.y});
         double logOddsUpdate = inverse_lidar_model(distance, rayLength);
         gridMap->update_likelihood(logOddsUpdate, index);
+        update_image_with_likelihood(logOddsUpdate, index);
 
 
     }
@@ -46,4 +48,27 @@ double LidarMapper::inverse_lidar_model(double cellDistance, double rayLength)
     else if (cellDistance > rayLength - mapResolution/2 && cellDistance < rayLength + mapResolution/2) return logOddsOccup;
     else return logOddsPrior;
 
+}
+
+const unsigned char* LidarMapper::get_image() const
+{
+    return reinterpret_cast<const unsigned char*>(imageBuffer.data());
+}
+
+void LidarMapper::set_inital_image()
+{
+    int initValue{0};
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&initValue);
+    rgba[3] = 127;
+    rgba[2] = 0;
+    rgba[1] = 0;
+    rgba[0] = 255;
+    std::fill(imageBuffer.begin(), imageBuffer.end(), initValue);
+
+}
+
+void LidarMapper::update_image_with_likelihood(double likelihood, int index)
+{
+    double cellProbability{logodds_to_probability(likelihood)};
+    probability_to_alpha(&imageBuffer[index], cellProbability);
 }

@@ -17,6 +17,7 @@ public:
     void step();
     void key_press(int key) const;
     void key_release() const;
+    LidarMapper* get_map(){return map;}
 
 private:
     void init_physics();

@@ -27,6 +27,9 @@ private slots:
     void on_actionStart_triggered();
     void setup();
 
+signals:
+    void send_map(const uchar* mapImageBuffer);
+
 private:
   Ui::MainWindow *ui;
   void timerEvent(QTimerEvent *);

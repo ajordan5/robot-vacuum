@@ -74,6 +74,8 @@ add_executable(App_RobotVacuum
     main.cpp
     mainwindow.cpp
     mainwindow.h
+    mappainter.h
+    mappainter.cpp
     mainwindow.ui
 )
 

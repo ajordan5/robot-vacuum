@@ -24,7 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setup_camera();
 
     mWorld = new World(mRootEntity, timeStep);
-
+    connect(this, SIGNAL(send_map(const uchar*)), ui->widget, SLOT(save_map_pointer(const uchar*)));
+    emit(send_map(mWorld->get_map()->get_image()));
     QTimer::singleShot(1000, this, SLOT(setup()));
 }
 
@@ -42,6 +43,8 @@ void MainWindow::setup()
 void MainWindow::timerEvent(QTimerEvent *)
 {
     mWorld->step();
+    ui->widget->update();
+//    emit(send_map(mWorld->get_map()->get_image()));
 }
 
 void MainWindow::on_actionStart_triggered()
@@ -75,6 +78,7 @@ void MainWindow::setup_3D_world()
     auto layout = new QVBoxLayout();
     layout->addWidget(container);
     ui->frame->setLayout(layout);
+
 
     mRootEntity = new Qt3DCore::QEntity();
     view->setRootEntity(mRootEntity);

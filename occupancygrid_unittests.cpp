@@ -3,6 +3,7 @@
 
 #include "occupancygrid.h"
 #include "lidar.h"
+#include "lidarmapper.h"
 #include "bulletutils.h"
 
 #define eps 0.00000001
@@ -263,6 +264,54 @@ TEST(OccupancyGridUtils, GivenTwoPoints_ExpectCorrect2DDistance2)
     double calculatedDist{dist_between_2_points_2D(positionA, positionB)};
 
     EXPECT_NEAR(goldenDist, calculatedDist, eps);
+}
+
+TEST(OccupancyGridUtils, GivenHalfProbabilityValue_ExpectCorrectMapToGrayscale)
+{
+    double prob{0.5};
+    unsigned char goldenGrayscale{127};
+    std::vector<int> imageBuffer{0, 0, 0, 0, 0};
+
+    probability_to_alpha(&imageBuffer[1], prob);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&imageBuffer[1]);
+
+    EXPECT_EQ(goldenGrayscale, rgba[3]);
+}
+
+TEST(OccupancyGridUtils, GivenFullProbabilityValue_ExpectCorrectMapToGrayscale)
+{
+    double prob{1.0};
+    unsigned char goldenGrayscale{255};
+    std::vector<int> imageBuffer{0, 0, 0, 0, 0};
+
+    probability_to_alpha(&imageBuffer[1], prob);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&imageBuffer[1]);
+
+    EXPECT_EQ(goldenGrayscale, rgba[3]);
+}
+
+TEST(OccupancyGridUtils, GivenEmptyProbabilityValue_ExpectCorrectMapToGrayscale)
+{
+    double prob{0.0};
+    unsigned char goldenGrayscale{0};
+    std::vector<int> imageBuffer{0, 0, 0, 0, 0};
+
+    probability_to_alpha(&imageBuffer[1], prob);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&imageBuffer[1]);
+
+    EXPECT_EQ(goldenGrayscale, rgba[3]);
+}
+
+TEST(OccupancyGridUtils, GivenSomeProbabilityValue_ExpectCorrectMapToGrayscale)
+{
+    double prob{0.856};
+    unsigned char goldenGrayscale{218};
+    std::vector<int> imageBuffer{0, 0, 0, 0, 0};
+
+    probability_to_alpha(&imageBuffer[1], prob);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&imageBuffer[1]);
+
+    EXPECT_EQ(goldenGrayscale, rgba[3]);
 }
 
 TEST(OccupancyGridGetIndex, GivenAPositionInWorldCoordinates_ExpectCorrectGridIndices)
@@ -848,3 +897,4 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByLargeNegativeAngle_ExpectCorrect
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
+

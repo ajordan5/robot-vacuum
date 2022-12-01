@@ -30,6 +30,14 @@ double logodds_to_probability(double logodds)
     return exp(logodds) / (1 + exp(logodds));
 }
 
+void probability_to_alpha(int* rgbaPixel, double prob)
+{
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(rgbaPixel);
+    unsigned char alpha = 255*prob;
+    rgba[3] = alpha;
+
+}
+
 double deg_2_rad(double angleDegrees)
 {
     return angleDegrees*M_PI/180;
