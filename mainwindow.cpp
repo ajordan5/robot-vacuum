@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setup_camera();
 
     mWorld = new World(mRootEntity, timeStep);
+    update_camera();
     connect(this, SIGNAL(send_map(const uchar*)), ui->widget, SLOT(save_map_pointer(const uchar*)));
     emit(send_map(mWorld->get_map()->get_image()));
     QTimer::singleShot(1000, this, SLOT(setup()));
@@ -43,8 +44,8 @@ void MainWindow::setup()
 void MainWindow::timerEvent(QTimerEvent *)
 {
     mWorld->step();
+    update_camera();
     ui->widget->update();
-//    emit(send_map(mWorld->get_map()->get_image()));
 }
 
 void MainWindow::on_actionStart_triggered()
@@ -87,12 +88,9 @@ void MainWindow::setup_3D_world()
 
 void MainWindow::setup_camera()
 {
-    Qt3DRender::QCamera *cameraEntity = view->camera();
-
+    cameraEntity = view->camera();
     cameraEntity->lens()->setPerspectiveProjection(45.0f, 16.0f/9.0f, 0.1f, 1000.0f);
-    cameraEntity->setPosition(QVector3D(200.0f, 0, 75));
     cameraEntity->setUpVector(QVector3D(0, 0, 1.0f));
-    cameraEntity->setViewCenter(QVector3D(0, 0, 50));
 
     Qt3DCore::QEntity *lightEntity = new Qt3DCore::QEntity(mRootEntity);
     Qt3DRender::QPointLight *light = new Qt3DRender::QPointLight(lightEntity);
@@ -102,4 +100,14 @@ void MainWindow::setup_camera()
     Qt3DCore::QTransform *lightTransform = new Qt3DCore::QTransform(lightEntity);
     lightTransform->setTranslation(QVector3D(200.0f, 200.0f, 200.0f));
     lightEntity->addComponent(lightTransform);
+}
+
+void MainWindow::update_camera()
+{
+    VehicleState currentState = mWorld->get_vacuum()->get_state();
+    cameraEntity->setViewCenter(QVector3D(currentState.x, currentState.y, 50));
+    double cameraX{currentState.x - 200*cos(currentState.heading)};
+    double cameraY{currentState.y - 200*sin(currentState.heading)};
+    cameraEntity->setPosition(QVector3D(cameraX, cameraY, 75));
+
 }

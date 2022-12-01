@@ -12,6 +12,7 @@ btRigidBody* local_create_rigidBody(btDynamicsWorld* m_ownerWorld, btScalar mass
     btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
     btRigidBody* body = new btRigidBody(rbInfo);
+    body->setFriction(1.0);
 
     m_ownerWorld->addRigidBody(body);
 

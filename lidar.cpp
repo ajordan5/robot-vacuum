@@ -4,7 +4,7 @@
 #include <QDebug>
 
 Lidar::Lidar(btDynamicsWorld* ownerWorld, double range, double viewAngleDeg, int numRays)
-    : maxRange{range}, fieldOfViewDegrees{viewAngleDeg}, numberOfRays{numRays}, world{ownerWorld}, to{-maxRange, 0, 0}
+    : maxRange{range}, fieldOfViewDegrees{viewAngleDeg}, numberOfRays{numRays}, world{ownerWorld}, to{maxRange, 0, 0}
 {
     if (range <= 0 || viewAngleDeg <= 0 || numRays <= 0)
     {

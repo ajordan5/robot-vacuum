@@ -18,7 +18,7 @@ void Obstacles::setup_physics()
     btVector3 wallBody(wallThickness/2, 100, wallHeight);
     m_shapes[0] = new btBoxShape(wallBody);
 
-    btVector3 vRoot = btVector3(btScalar(0.), btScalar(0), btScalar(0));
+    btVector3 vRoot = btVector3(btScalar(40.), btScalar(40), btScalar(0));
     btTransform transform;
     transform.setIdentity();
     transform.setOrigin(vRoot);

@@ -16,7 +16,7 @@ void MapPainter::paintEvent(QPaintEvent* event)
     int intSize{sizeof(int)};
     int numberOfBytesPerWidth{width*intSize};
     QImage image{mapImage,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
-    painter.drawImage(QRect{0,0,this->width(),this->height()},image);
+    painter.drawImage(QRect{0,0,this->width(),this->height()},image.mirrored());
 
 }
 

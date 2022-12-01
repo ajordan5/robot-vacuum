@@ -203,11 +203,11 @@ void Vacuum::drive(int key)
 {
     switch(key)
     {
-    case Qt::Key::Key_Up:
+    case Qt::Key::Key_Down:
         m_joints[0]->enableAngularMotor(true, 15, 50);
         m_joints[1]->enableAngularMotor(true, -15, 50);
         break;
-    case Qt::Key::Key_Down:
+    case Qt::Key::Key_Up:
         m_joints[0]->enableAngularMotor(true, -15, 50);
         m_joints[1]->enableAngularMotor(true, 15, 50);
         break;

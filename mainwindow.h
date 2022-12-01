@@ -31,14 +31,16 @@ signals:
     void send_map(const uchar* mapImageBuffer);
 
 private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow *ui;  
+  Qt3DRender::QCamera* cameraEntity;
+
   void timerEvent(QTimerEvent *);
   void setTimeStep(double ts) {timeStep = ts;}
   void keyPressEvent(QKeyEvent* event);
   void keyReleaseEvent(QKeyEvent* event);
-
   void setup_3D_world();
   void setup_camera();
+  void update_camera();
 
   double timeStep{1/60.0};
   World* mWorld;

@@ -32,9 +32,9 @@ private:
     btHingeConstraint* m_joints[2];
     double bodyRadius{5};
     double halfBodyThickness{2};
-    double wheelRadius{2.2};
+    double wheelRadius{2.4};
     double halfWheelThickness{0.5};
-    double lidarRange{20};
+    double lidarRange{200};
     Lidar* lidar;
     VehicleState state;
 
