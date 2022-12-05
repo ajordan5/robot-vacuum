@@ -18,16 +18,17 @@ public:
 
 private:
     btDynamicsWorld* m_ownerWorld;
-    btCollisionShape* m_shapes[4];
-    btRigidBody* m_bodies[4];
+    btCollisionShape* m_shapes[6];
+    btRigidBody* m_bodies[6];
     double wallThickness{10};
     double wallHeight{50};
+    double outerWallLength{400};
 
     btScalar btMat[16];
     btTransform trans;
 
-    Qt3DCore::QTransform *mTransforms[4];
-    Qt3DCore::QEntity *mEntities[4];
+    Qt3DCore::QTransform *mTransforms[6];
+    Qt3DCore::QEntity *mEntities[6];
 
     void setup_physics();
     void setup_graphics();

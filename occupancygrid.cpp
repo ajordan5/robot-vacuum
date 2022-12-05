@@ -54,7 +54,7 @@ int OccupancyGrid::get_cell_index(double x, double y) const
 
 std::vector<int> OccupancyGrid::get_cell_indices_along_ray(double x, double y, double rayAngle, double rayLength) const
 {
-    double checkIncrement{resolution/2};
+    double checkIncrement{resolution/5};
     double distanceTraveled{0};
     std::pair<double, double> checkLocation{x, y};
     int indexPrev{-1};

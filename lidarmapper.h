@@ -26,7 +26,7 @@ private:
     OccupancyGrid* gridMap;
     double probabiltyFree{0.35};
     double probabiltyPrior{0.5};
-    double probabiltyOccup{0.65};
+    double probabiltyOccup{0.85};
     double logOddsFree;
     double logOddsPrior;
     double logOddsOccup;
