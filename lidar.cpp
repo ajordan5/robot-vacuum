@@ -1,6 +1,6 @@
 #include "lidar.h"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
-#include "bulletutils.h"
+#include "simutils.h"
 #include <QDebug>
 
 Lidar::Lidar(btDynamicsWorld* ownerWorld, double range, double viewAngleDeg, int numRays)

@@ -4,7 +4,7 @@
 #include "occupancygrid.h"
 #include "lidar.h"
 #include "lidarmapper.h"
-#include "bulletutils.h"
+#include "simutils.h"
 
 #define eps 0.00000001
 

@@ -37,8 +37,8 @@ add_library(RobotVacuumSim STATIC
   lidar.cpp
   world.h
   world.cpp
-  bulletutils.cpp
-  bulletutils.h
+  simutils.cpp
+  simutils.h
 
 )
 
@@ -95,16 +95,4 @@ target_link_libraries(App_RobotVacuum
     ${BULLET_LIBRARIES}
     RobotVacuumSim
     )
-
-
-#add_executable(App_RobotVacuum
-#    simmain.cpp
-#    simentries.h
-#    simentries.cpp)
-
-##set(CORRECT_DIR )
-#message(STATUS "!!!!!!!!!!!!!!BULLET LIBS: ${BULLET_INCLUDE_DIRS}")
-#target_link_directories(App_RobotVacuum PRIVATE ${BULLET_LIBRARY_DIRS} C:/bullet3/lib)
-#target_include_directories(App_RobotVacuum PUBLIC ${BULLET_INCLUDE_DIRS} ${BULLET_PHYSICS_SOURCE_DIR}/examples/ExampleBrowser)
-#target_link_libraries(App_RobotVacuum ${BULLET_LIBRARIES} RobotVacuumSim BulletExampleBrowserLib)
 

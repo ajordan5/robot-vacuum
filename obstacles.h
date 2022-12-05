@@ -7,7 +7,7 @@
 #include <Qt3DCore/QTransform>
 #include <QColor>
 
-#include "bulletutils.h"
+#include "simutils.h"
 
 class Obstacles
 {
@@ -26,8 +26,8 @@ private:
     btScalar btMat[16];
     btTransform trans;
 
-    Qt3DCore::QTransform *mTransforms[3];
-    Qt3DCore::QEntity *mEntities[3];
+    Qt3DCore::QTransform *mTransforms[4];
+    Qt3DCore::QEntity *mEntities[4];
 
     void setup_physics();
     void setup_graphics();

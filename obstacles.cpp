@@ -18,33 +18,27 @@ void Obstacles::setup_physics()
     btVector3 wallBody(wallThickness/2, 100, wallHeight);
     m_shapes[0] = new btBoxShape(wallBody);
 
-    btVector3 vRoot = btVector3(btScalar(40.), btScalar(40), btScalar(0));
+    btVector3 vRoot = btVector3(btScalar(50.), btScalar(100), btScalar(0));
     btTransform transform;
     transform.setIdentity();
     transform.setOrigin(vRoot);
     m_bodies[0] = local_create_rigidBody(m_ownerWorld, btScalar(0.), transform, m_shapes[0]);
 
+    m_shapes[1] = new btBoxShape(wallBody);
 
+    vRoot = btVector3(btScalar(150.), btScalar(100), btScalar(0));
+    transform.setIdentity();
+    transform.setOrigin(vRoot);
+    m_bodies[1] = local_create_rigidBody(m_ownerWorld, btScalar(0.), transform, m_shapes[0]);
 }
 
 void Obstacles::setup_graphics()
 {
-    Qt3DExtras::QCuboidMesh* bodyMesh = new Qt3DExtras::QCuboidMesh();
-    // TODO put creating these shapes in a util function that takes sizes, rotation and shape
-    bodyMesh->setXExtent(wallThickness);
-    bodyMesh->setYExtent(200);
-    bodyMesh->setZExtent(wallHeight*2);
-    mTransforms[0] = new Qt3DCore::QTransform();
-//    mTransforms[0]->setTranslation(mResetPosition);
-
-    Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
-    material->setDiffuse(Qt::blue);
-
-    mEntities[0] = new Qt3DCore::QEntity();
-    mEntities[0]->addComponent(bodyMesh);
-    mEntities[0]->addComponent(material);
-    mEntities[0]->addComponent(mTransforms[0]);
-    mEntities[0]->setEnabled(true);
+    for (int i = 0; i < 2; ++i)
+    {
+        mTransforms[i] = new Qt3DCore::QTransform();
+        mEntities[i] = create_cuboid(wallThickness, 200, wallHeight, Qt::blue, mTransforms[i]);
+    }
 
     set_graphics_positions();
 
@@ -52,13 +46,13 @@ void Obstacles::setup_graphics()
 
 void Obstacles::set_graphics_positions()
 {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
     {
         m_bodies[i]->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(btMat);
 
         QMatrix4x4 trans(btMat);
-        trans=trans.transposed();//Converting between opengl column major to Qt row major
+        trans=trans.transposed();
         mTransforms[i]->setMatrix(trans);
     }
 }

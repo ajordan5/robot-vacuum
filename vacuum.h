@@ -7,7 +7,7 @@
 #include <Qt3DCore/QTransform>
 #include <QColor>
 
-#include "bulletutils.h"
+#include "simutils.h"
 #include "lidar.h"
 #include "lidarmapper.h"
 
@@ -34,7 +34,7 @@ private:
     double halfBodyThickness{2};
     double wheelRadius{2.4};
     double halfWheelThickness{0.5};
-    double lidarRange{200};
+    double lidarRange{40};
     Lidar* lidar;
     VehicleState state;
 

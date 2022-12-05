@@ -24,9 +24,9 @@ private:
     void set_inital_image();
 
     OccupancyGrid* gridMap;
-    double probabiltyFree{0.25};
+    double probabiltyFree{0.35};
     double probabiltyPrior{0.5};
-    double probabiltyOccup{0.85};
+    double probabiltyOccup{0.65};
     double logOddsFree;
     double logOddsPrior;
     double logOddsOccup;

@@ -5,7 +5,7 @@ World::World(Qt3DCore::QEntity* rootEntity, double simTimeStep)
 {
     init_physics();
     create_world();
-    map = new LidarMapper(mVacuum->get_lidar_range(), 1000, 1000, 1);
+    map = new LidarMapper(mVacuum->get_lidar_range(), 200, 200, 2);
 }
 
 World::~World()
@@ -47,8 +47,9 @@ void World::create_world()
 
     mObstacles = new Obstacles(dynamicsWorld);
     mObstacles->getQEntity()[0]->setParent(mRootEntity);
+    mObstacles->getQEntity()[1]->setParent(mRootEntity);
 
-    btVector3 initPos(50,50,0);
+    btVector3 initPos(100,100,0);
     mVacuum = new Vacuum(dynamicsWorld, initPos);
     mVacuum->getQEntity()[0]->setParent(mRootEntity);
     mVacuum->getQEntity()[1]->setParent(mRootEntity);

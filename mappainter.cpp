@@ -11,8 +11,8 @@ void MapPainter::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    int width{1000};
-    int height{1000};
+    int width{100};
+    int height{100};
     int intSize{sizeof(int)};
     int numberOfBytesPerWidth{width*intSize};
     QImage image{mapImage,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};

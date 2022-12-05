@@ -35,7 +35,7 @@ void LidarMapper::integrate_cells_along_ray(const std::vector<int>& cellIndices,
         double distance = dist_between_2_points_2D(cellCenter, {state.x, state.y});
         double logOddsUpdate = inverse_lidar_model(distance, rayLength);
         gridMap->update_likelihood(logOddsUpdate, index);
-        update_image_with_likelihood(logOddsUpdate, index);
+        update_image_with_likelihood(gridMap->get_map()[index], index);
 
 
     }

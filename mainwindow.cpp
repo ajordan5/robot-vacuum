@@ -80,7 +80,6 @@ void MainWindow::setup_3D_world()
     layout->addWidget(container);
     ui->frame->setLayout(layout);
 
-
     mRootEntity = new Qt3DCore::QEntity();
     view->setRootEntity(mRootEntity);
 
@@ -108,6 +107,6 @@ void MainWindow::update_camera()
     cameraEntity->setViewCenter(QVector3D(currentState.x, currentState.y, 50));
     double cameraX{currentState.x - 200*cos(currentState.heading)};
     double cameraY{currentState.y - 200*sin(currentState.heading)};
-    cameraEntity->setPosition(QVector3D(cameraX, cameraY, 75));
+    cameraEntity->setPosition(QVector3D(cameraX, cameraY, 125));
 
 }

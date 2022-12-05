@@ -54,7 +54,7 @@ int OccupancyGrid::get_cell_index(double x, double y) const
 
 std::vector<int> OccupancyGrid::get_cell_indices_along_ray(double x, double y, double rayAngle, double rayLength) const
 {
-    double checkIncrement{resolution/4};
+    double checkIncrement{resolution/2};
     double distanceTraveled{0};
     std::pair<double, double> checkLocation{x, y};
     int indexPrev{-1};
@@ -97,5 +97,5 @@ std::pair<double, double> OccupancyGrid::get_cell_center(int idx) const
 void OccupancyGrid::update_likelihood(double value, int idx)
 {
 
-    if (idx >= 0 || idx < logLikelihoodMap.size()) logLikelihoodMap[idx] += value;
+    if (idx >= 0 && idx < logLikelihoodMap.size()) logLikelihoodMap[idx] += value;
 }
