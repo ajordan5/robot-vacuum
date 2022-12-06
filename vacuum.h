@@ -10,6 +10,7 @@
 #include "simutils.h"
 #include "lidar.h"
 #include "lidarmapper.h"
+#include "dualsensedriver.h"
 
 class Vacuum
 {
@@ -23,6 +24,7 @@ public:
     double get_heading();
     VehicleState get_state();
     void drive(int key);
+    void controller_drive(VacuumControlState control);
     void stop();    
 
 private:

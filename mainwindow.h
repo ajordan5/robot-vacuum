@@ -16,11 +16,13 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+    void controller();
+
 
 
 private slots:
@@ -30,22 +32,23 @@ signals:
     void send_map(LidarMapper* map);
 
 private:
-  Ui::MainWindow *ui;  
-  Qt3DRender::QCamera* cameraEntity;
+    Ui::MainWindow *ui;
+    Qt3DRender::QCamera* cameraEntity;
 
-  void timerEvent(QTimerEvent *);
-  void setTimeStep(double ts) {timeStep = ts;}
-  void keyPressEvent(QKeyEvent* event);
-  void keyReleaseEvent(QKeyEvent* event);
-  void setup_3D_world();
-  void setup_camera();
-  void update_camera();
+    void timerEvent(QTimerEvent *);
+    void setTimeStep(double ts) {timeStep = ts;}
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
+    void setup_3D_world();
+    void setup_camera();
+    void update_camera();
 
-  double timeStep{1/60.0};
-  World* mWorld;
+    double timeStep{1/60.0};
+    World* mWorld;
+    DualSenseDriver driver;
 
-  Qt3DCore::QEntity *mRootEntity;
-  Qt3DExtras::Qt3DWindow* view;
+    Qt3DCore::QEntity *mRootEntity;
+    Qt3DExtras::Qt3DWindow* view;
 };
 
 #endif // MAINWINDOW_H

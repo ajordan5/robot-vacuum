@@ -74,12 +74,18 @@ if(BUILD_TESTS)
     )
 endif(BUILD_TESTS)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+find_package(Ds5w REQUIRED)
+
 add_executable(App_RobotVacuum
     main.cpp
     mainwindow.cpp
     mainwindow.h
     mappainter.h
     mappainter.cpp
+    dualsensedriver.h
+    dualsensedriver.cpp
+    ds5w.h
     mainwindow.ui
 )
 
@@ -87,6 +93,7 @@ target_compile_definitions(App_RobotVacuum PRIVATE ${BULLET_DEFINITIONS})
 target_include_directories(App_RobotVacuum
     PRIVATE
     ${BULLET_INCLUDE_DIRS}
+    ${Ds5w_INCLUDE_DIR}
 )
 
 target_link_libraries(App_RobotVacuum
@@ -97,6 +104,7 @@ target_link_libraries(App_RobotVacuum
     Qt6::3DInput
     Qt6::3DExtras
     ${BULLET_LIBRARIES}
+    ${Ds5w_LIBRARY}
     RobotVacuumSim
     )
 

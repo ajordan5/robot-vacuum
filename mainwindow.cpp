@@ -13,12 +13,17 @@
 #include <QGridLayout>
 #include <QDebug>
 #include <iostream>
+#include "ds5w.h"
+#include <Windows.h>
+#include <iostream>
+#include "dualsensedriver.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     setup_3D_world();
     setup_camera();
@@ -43,6 +48,13 @@ void MainWindow::timerEvent(QTimerEvent*)
     update_camera();
     ui->mapWidget->update();
     ui->progressBar->setValue(mWorld->get_map()->percent_seen());
+
+    if(driver.is_available())
+    {
+        VacuumControlState control = driver.get_control();
+        mWorld->get_vacuum()->controller_drive(control);
+    }
+
 
 }
 
@@ -111,5 +123,17 @@ void MainWindow::update_camera()
     double cameraX{currentState.x - 200*cos(currentState.heading)};
     double cameraY{currentState.y - 200*sin(currentState.heading)};
     cameraEntity->setPosition(QVector3D(cameraX, cameraY, 125));
+
+}
+
+void MainWindow::controller()
+{
+        DualSenseDriver driver;
+
+        while(true)
+        {
+            VacuumControlState control = driver.get_control();
+            qInfo() << control.drive;
+        }
 
 }
