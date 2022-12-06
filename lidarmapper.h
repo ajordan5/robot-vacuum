@@ -16,6 +16,8 @@ public:
     LidarMapper(double maxRange, double width, double height, double resolution);
     void add_measurements_to_map(const std::pair<Eigen::VectorXd, Eigen::VectorXd>& rayAngleLengthPairs, const VehicleState& state);
     const unsigned char* get_image() const;
+    int get_num_rows() {return mapHeight;}
+    int get_num_cols() {return mapWidth;}
 
 private:
     void integrate_cells_along_ray(const std::vector<int>& cellIndices, const VehicleState& state, double rayLength);
@@ -32,6 +34,8 @@ private:
     double logOddsOccup;
     double lidarRange;
     double mapResolution;
+    int mapHeight;
+    int mapWidth;
     std::vector<int> imageBuffer;
 };
 

@@ -21,8 +21,8 @@ void Obstacles::setup_physics()
         m_shapes[i] = new btBoxShape(outerWallBody);
     }
 
-    outerWallBody = btVector3(btScalar(wallThickness/2), btScalar(outerWallLength/4), btScalar(wallHeight/2));
-    m_shapes[4] = new btBoxShape(outerWallBody);
+    btVector3 wallBody = btVector3(btScalar(wallThickness/2), btScalar(outerWallLength/4), btScalar(wallHeight/2));
+    m_shapes[4] = new btBoxShape(wallBody);
 
 
     btVector3 vRoot = btVector3(btScalar(0.), btScalar(outerWallLength/2), btScalar(0));

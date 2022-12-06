@@ -5,20 +5,15 @@ World::World(Qt3DCore::QEntity* rootEntity, double simTimeStep)
 {
     init_physics();
     create_world();
-    map = new LidarMapper(mVacuum->get_lidar_range(), 400, 400, 2);
+    map = new LidarMapper(mVacuum->get_lidar_range(), 400, 400, 4);
 }
 
 World::~World()
 {
     dynamicsWorld->removeRigidBody(mGround->getRigidBodyPtr());
     delete mGround;
-
-//    dynamicsWorld->removeRigidBody(mVacuum->getRigidBodyPtr());
     delete mVacuum;
-
-//    dynamicsWorld->removeRigidBody(mObstacles->getRigidBodyPtr());
     delete mObstacles;
-
 
     delete seqImpConstraintSolver;
     delete collisionDispatcher;

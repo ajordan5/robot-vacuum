@@ -28,7 +28,7 @@ private slots:
     void setup();
 
 signals:
-    void send_map(const uchar* mapImageBuffer);
+    void send_map(LidarMapper* map);
 
 private:
   Ui::MainWindow *ui;  

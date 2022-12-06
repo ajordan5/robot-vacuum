@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <lidarmapper.h>
 
 class MapPainter : public QWidget
 {
@@ -12,11 +13,14 @@ public:
     MapPainter(QWidget* parent = 0);
 
 public slots:
-    void save_map_pointer(const uchar* map);
+    void save_map_pointer(LidarMapper* map);
 
 protected:
     void paintEvent(QPaintEvent* event);
     const uchar* mapImage;
+    int mapWidth;
+    int mapHeight;
+    int numberOfBytesPerWidth;
 
 };
 

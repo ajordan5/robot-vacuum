@@ -11,6 +11,7 @@ class Ground
 {
 public:
   Ground();
+  ~Ground();
   Ground(QColor color);
   btRigidBody* getRigidBodyPtr() const {return mRigidBody;}
   Qt3DCore::QEntity* getQEntity() const {return mPlaneEntity;}
@@ -29,7 +30,6 @@ private:
   void create_physics_representation();
   void create_graphics_representation();
 
-  void destroy();
 };
 
 #endif // CHESSBOARD_H

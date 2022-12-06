@@ -8,6 +8,8 @@ LidarMapper::LidarMapper(double maxRange, double width, double height, double re
     logOddsOccup = probability_to_logodds(probabiltyOccup);
 
     gridMap = new OccupancyGrid(width, height, resolution);
+    mapWidth = gridMap->get_x_coords().size()-1;
+    mapHeight = gridMap->get_y_coords().size()-1;
     imageBuffer.resize(gridMap->get_map().size());
     set_inital_image();
 

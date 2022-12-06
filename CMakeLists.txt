@@ -56,19 +56,23 @@ target_link_libraries(RobotVacuumSim
     Qt6::3DExtras
     OMap)
 
-find_package(GTest REQUIRED)
 
-add_executable(occupancygrid_unittests)
+option(BUILD_TESTS "Build unit tests" ON)
+if(BUILD_TESTS)
+    find_package(GTest REQUIRED)
 
-target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
-target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
-target_link_libraries(occupancygrid_unittests
-    PRIVATE
-        ${GTEST_LIBRARIES}
-        ${GTEST_MAIN_LIBRARIES}
-        RobotVacuumSim
-        OMap
-)
+    add_executable(occupancygrid_unittests)
+
+    target_sources(occupancygrid_unittests PRIVATE occupancygrid_unittests.cpp)
+    target_include_directories(occupancygrid_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
+    target_link_libraries(occupancygrid_unittests
+        PRIVATE
+            ${GTEST_LIBRARIES}
+            ${GTEST_MAIN_LIBRARIES}
+            RobotVacuumSim
+            OMap
+    )
+endif(BUILD_TESTS)
 
 add_executable(App_RobotVacuum
     main.cpp

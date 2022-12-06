@@ -11,17 +11,19 @@ void MapPainter::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    int width{200};
-    int height{200};
-    int intSize{sizeof(int)};
-    int numberOfBytesPerWidth{width*intSize};
-    QImage image{mapImage,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
+    QImage image{mapImage,mapWidth,mapHeight,numberOfBytesPerWidth,QImage::Format_ARGB32};
     painter.drawImage(QRect{0,0,this->width(),this->height()},image.mirrored());
 
 }
 
-void MapPainter::save_map_pointer(const uchar* map)
+void MapPainter::save_map_pointer(LidarMapper* map)
 {
-    mapImage = map;
+    mapImage = map->get_image();
+    mapWidth = map->get_num_cols();
+    mapHeight = map->get_num_rows();
+
+    int intSize{sizeof(int)};
+    numberOfBytesPerWidth = mapWidth*intSize;
+
 
 }

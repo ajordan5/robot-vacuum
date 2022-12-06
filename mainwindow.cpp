@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mWorld = new World(mRootEntity, timeStep);
     update_camera();
-    connect(this, SIGNAL(send_map(const uchar*)), ui->widget, SLOT(save_map_pointer(const uchar*)));
-    emit(send_map(mWorld->get_map()->get_image()));
+    connect(this, SIGNAL(send_map(LidarMapper*)), ui->widget, SLOT(save_map_pointer(LidarMapper*)));
+    emit(send_map(mWorld->get_map()));
     QTimer::singleShot(1000, this, SLOT(setup()));
 }
 
