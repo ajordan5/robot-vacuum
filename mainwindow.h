@@ -24,9 +24,8 @@ public:
 
 
 private slots:
-    void on_actionStart_triggered();
-    void setup();
-
+    void start_sim();
+    void reset_map();
 signals:
     void send_map(LidarMapper* map);
 

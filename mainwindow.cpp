@@ -25,9 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mWorld = new World(mRootEntity, timeStep);
     update_camera();
-    connect(this, SIGNAL(send_map(LidarMapper*)), ui->widget, SLOT(save_map_pointer(LidarMapper*)));
+
+    connect(this, SIGNAL(send_map(LidarMapper*)), ui->mapWidget, SLOT(save_map_pointer(LidarMapper*)));
+    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(start_sim()));
+    connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(reset_map()));
     emit(send_map(mWorld->get_map()));
-    QTimer::singleShot(1000, this, SLOT(setup()));
 }
 
 MainWindow::~MainWindow()
@@ -35,22 +37,23 @@ MainWindow::~MainWindow()
     delete ui;
 
 }
-
-void MainWindow::setup()
-{
-
-}
-
-void MainWindow::timerEvent(QTimerEvent *)
+void MainWindow::timerEvent(QTimerEvent*)
 {
     mWorld->step();
     update_camera();
-    ui->widget->update();
+    ui->mapWidget->update();
+    ui->progressBar->setValue(mWorld->get_map()->percent_seen());
+
 }
 
-void MainWindow::on_actionStart_triggered()
+void MainWindow::start_sim()
 {
     startTimer(timeStep * 1000);
+}
+
+void MainWindow::reset_map()
+{
+    mWorld->get_map()->set_initial_image();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -78,7 +81,7 @@ void MainWindow::setup_3D_world()
     QWidget *container = QWidget::createWindowContainer(view);
     auto layout = new QVBoxLayout();
     layout->addWidget(container);
-    ui->frame->setLayout(layout);
+    ui->worldFrame->setLayout(layout);
 
     mRootEntity = new Qt3DCore::QEntity();
     view->setRootEntity(mRootEntity);

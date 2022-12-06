@@ -99,3 +99,8 @@ void OccupancyGrid::update_likelihood(double value, int idx)
 {
     if (idx >= 0 && idx < logLikelihoodMap.size()) logLikelihoodMap[idx] += value;
 }
+
+void OccupancyGrid::set_initial_likelihood(double initValue)
+{
+    std::fill(logLikelihoodMap.begin(), logLikelihoodMap.end(), initValue);
+}

@@ -18,12 +18,13 @@ public:
     const unsigned char* get_image() const;
     int get_num_rows() {return mapHeight;}
     int get_num_cols() {return mapWidth;}
+    void set_initial_image();
+    double percent_seen();
 
 private:
     void integrate_cells_along_ray(const std::vector<int>& cellIndices, const VehicleState& state, double rayLength);
     double inverse_lidar_model(double cellDistance, double rayLength);
     void update_image_with_likelihood(double likelihood, int index);
-    void set_inital_image();
 
     OccupancyGrid* gridMap;
     double probabiltyFree{0.35};
@@ -36,6 +37,7 @@ private:
     double mapResolution;
     int mapHeight;
     int mapWidth;
+    int initValue;
     std::vector<int> imageBuffer;
 };
 

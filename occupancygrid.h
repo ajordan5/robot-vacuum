@@ -24,6 +24,7 @@ public:
     double get_height() const;
     double get_resolution() const;
     void update_likelihood(double value, int index);
+    void set_initial_likelihood(double likelihood);
 
 protected:
     double width;

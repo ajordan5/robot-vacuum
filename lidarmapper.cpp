@@ -11,7 +11,7 @@ LidarMapper::LidarMapper(double maxRange, double width, double height, double re
     mapWidth = gridMap->get_x_coords().size()-1;
     mapHeight = gridMap->get_y_coords().size()-1;
     imageBuffer.resize(gridMap->get_map().size());
-    set_inital_image();
+    set_initial_image();
 
 }
 
@@ -57,9 +57,9 @@ const unsigned char* LidarMapper::get_image() const
     return reinterpret_cast<const unsigned char*>(imageBuffer.data());
 }
 
-void LidarMapper::set_inital_image()
+void LidarMapper::set_initial_image()
 {
-    int initValue{0};
+    initValue = 0;
     unsigned char* rgba = reinterpret_cast<unsigned char*>(&initValue);
     rgba[3] = 127;
     rgba[2] = 0;
@@ -67,6 +67,15 @@ void LidarMapper::set_inital_image()
     rgba[0] = 255;
     std::fill(imageBuffer.begin(), imageBuffer.end(), initValue);
 
+}
+
+double LidarMapper::percent_seen()
+{
+    int res = count_if(imageBuffer.begin(), imageBuffer.end(),
+                           [this](int i) { return i != initValue; });
+
+    double decimalPercent{(double)res / imageBuffer.size()};
+    return (int)(100*decimalPercent);
 }
 
 void LidarMapper::update_image_with_likelihood(double likelihood, int index)
