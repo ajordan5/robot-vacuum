@@ -15,7 +15,7 @@
 Vacuum::Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition)
     : m_ownerWorld{ownerWorld }, mResetPosition{initalPosition.getX(),initalPosition.getY(),initalPosition.getZ()}
 {
-    lidar = new Lidar(m_ownerWorld, lidarRange, 180, 5);
+    lidar = new Lidar(m_ownerWorld, lidarRange, 160, 20);
     setup_physics(initalPosition);
     setup_graphics();
 

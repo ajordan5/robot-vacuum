@@ -36,7 +36,7 @@ private:
     double halfBodyThickness{2};
     double wheelRadius{2.4};
     double halfWheelThickness{0.5};
-    double lidarRange{40};
+    double lidarRange{60};
     Lidar* lidar;
     VehicleState state;
 
