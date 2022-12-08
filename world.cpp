@@ -41,22 +41,11 @@ void World::create_world()
     mGround->getQEntity()->setParent(mRootEntity);
 
     mObstacles = new Obstacles(dynamicsWorld);
-    // TODO make a set_parent method to do all of this
-    mObstacles->getQEntity()[0]->setParent(mRootEntity);
-    mObstacles->getQEntity()[1]->setParent(mRootEntity);
-    mObstacles->getQEntity()[2]->setParent(mRootEntity);
-    mObstacles->getQEntity()[3]->setParent(mRootEntity);
-    mObstacles->getQEntity()[4]->setParent(mRootEntity);
-    mObstacles->getQEntity()[5]->setParent(mRootEntity);
-    mObstacles->getQEntity()[6]->setParent(mRootEntity);
-    mObstacles->getQEntity()[7]->setParent(mRootEntity);
+    mObstacles->set_graphics_parent(mRootEntity);
 
     btVector3 initPos(200,200,0);
     mVacuum = new Vacuum(dynamicsWorld, initPos);
-    mVacuum->getQEntity()[0]->setParent(mRootEntity);
-    mVacuum->getQEntity()[1]->setParent(mRootEntity);
-    mVacuum->getQEntity()[2]->setParent(mRootEntity);
-    mVacuum->getQEntity()[3]->setParent(mRootEntity);
+    mVacuum->set_graphics_parent(mRootEntity);
 
 }
 

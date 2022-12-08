@@ -17,13 +17,13 @@ class Vacuum
 public:
     Vacuum(btDynamicsWorld* ownerWorld, btVector3 initalPosition);
     btRigidBody** get_vehicle_body() {return m_bodies;}
-    Qt3DCore::QEntity** getQEntity() {return mEntities;}
     double get_lidar_range() const {return lidarRange;}
     double get_heading() ;
     VehicleState get_state();
 
+    void set_graphics_parent(Qt3DCore::QEntity* mRootEntity);
     void update_position();
-    std::pair<Eigen::VectorXd, Eigen::VectorXd> update_measurements();    
+    std::pair<Eigen::VectorXd, Eigen::VectorXd> update_measurements();
     void arrowkey_drive(int key);
     void controller_drive(const VacuumControlState& control);
     void brake_wheels();

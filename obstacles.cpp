@@ -123,3 +123,11 @@ void Obstacles::set_graphics_positions()
         mTransforms[i]->setMatrix(trans);
     }
 }
+
+void Obstacles::set_graphics_parent(Qt3DCore::QEntity* mRootEntity)
+{
+    for(Qt3DCore::QEntity* entity : mEntities)
+    {
+        entity->setParent(mRootEntity);
+    }
+}

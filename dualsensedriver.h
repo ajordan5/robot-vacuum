@@ -21,8 +21,11 @@ public:
 
 private:
     void init_controller();
+    void set_haptic_feedback(DS5W::DS5OutputState& outState);
+    void set_vibration(const DS5W::DS5InputState& inState, DS5W::DS5OutputState& outState, double forwardBack);
     bool connected;
     bool initialized;
+    bool enableRumble{false};
     DS5W::DeviceEnumInfo infos[16];
     DS5W::DeviceContext context;
 };

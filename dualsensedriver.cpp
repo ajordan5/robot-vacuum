@@ -26,6 +26,7 @@ void DualSenseDriver::init_controller()
     }
 
     initialized = !DS5W_FAILED(DS5W::initDeviceContext(&infos[0], &context));
+
 }
 
 VacuumControlState DualSenseDriver::get_control()
@@ -47,13 +48,32 @@ VacuumControlState DualSenseDriver::get_control()
         controller.drive = forwardBack;
         controller.turn = leftRight;
         controller.turbo = rightTrigger;
-        outState.rightRumble =  abs((int)(forwardBack*5));
+        set_vibration(inState, outState, forwardBack);
+        set_haptic_feedback(outState);
 
         DS5W::setDeviceOutputState(&context, &outState);
 
     }
 
     return controller;
+}
+
+void DualSenseDriver::set_vibration(const DS5W::DS5InputState& inState, DS5W::DS5OutputState& outState, double forwardBack)
+{
+    if (inState.leftTrigger == 255)
+        enableRumble = !enableRumble;
+    if (enableRumble)
+        outState.rightRumble =  abs((int)(forwardBack*5));
+}
+
+void DualSenseDriver::set_haptic_feedback(DS5W::DS5OutputState& outState)
+{
+    DS5W::TriggerEffect trigger;
+    trigger.effectType = DS5W::TriggerEffectType::ContinuousResitance;
+    trigger.Continuous.startPosition = 0;
+    trigger.Continuous.force = 120;
+    outState.rightTriggerEffect = trigger;
+
 }
 
 double normalize_analog_stick_int(int input)

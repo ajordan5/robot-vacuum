@@ -15,6 +15,7 @@ public:
     Obstacles(btDynamicsWorld* ownerWorld);
     btRigidBody** get_obstacle_body() {return m_bodies;}
     Qt3DCore::QEntity** getQEntity() {return mEntities;}
+    void set_graphics_parent(Qt3DCore::QEntity* mRootEntity);
 
 private:
     btDynamicsWorld* m_ownerWorld;

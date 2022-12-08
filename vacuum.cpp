@@ -132,6 +132,14 @@ void Vacuum::setup_graphics()
 
 }
 
+void Vacuum::set_graphics_parent(Qt3DCore::QEntity* mRootEntity)
+{
+    for(Qt3DCore::QEntity* entity : mEntities)
+    {
+        entity->setParent(mRootEntity);
+    }
+}
+
 void Vacuum::update_position()
 {
     for (int i = 0; i < 4; i++)
