@@ -33,42 +33,43 @@ VacuumControlState DualSenseDriver::get_control()
     DS5W::DS5InputState inState;
     VacuumControlState controller;
 
-    if (DS5W_SUCCESS(DS5W::getDeviceInputState(&context, &inState))){
+    if (is_available() && DS5W_SUCCESS(DS5W::getDeviceInputState(&context, &inState)))
+    {
 
         DS5W::DS5OutputState outState;
         ZeroMemory(&outState, sizeof(DS5W::DS5OutputState));
 
-        double forwardBack = normalize_int((int)inState.leftStick.y);
-        double leftRight = normalize_int((int)inState.leftStick.x);
-        double rightTrigger = normalize_uint(inState.rightTrigger);
+        double forwardBack = normalize_analog_stick_int((int)inState.leftStick.y);
+        double leftRight = normalize_analog_stick_int((int)inState.leftStick.x);
+        double rightTrigger = normalize_trigger_uint(inState.rightTrigger);
 
 
         controller.drive = forwardBack;
         controller.turn = leftRight;
         controller.turbo = rightTrigger;
-
-//        outState.leftRumble = abs((int)(forwardBack*10));
         outState.rightRumble =  abs((int)(forwardBack*5));
 
         DS5W::setDeviceOutputState(&context, &outState);
+
     }
+
     return controller;
 }
 
-double normalize_int(int input)
+double normalize_analog_stick_int(int input)
 {
-    if(is_dead_zone(input)) return 0;
+    if(is_analog_stick_dead_zone(input)) return 0;
 
     return (double)input/128;
 }
 
-double normalize_uint(int input)
+double normalize_trigger_uint(int input)
 {
 
     return (double)input/255;
 }
 
-bool is_dead_zone(int input)
+bool is_analog_stick_dead_zone(int input)
 {
     return abs(input) < 6;
 }

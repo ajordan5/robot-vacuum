@@ -1,10 +1,10 @@
 
 #ifndef GROUND_H
 #define GROUND_H
+
 #include <QMatrix4x4>
 #include "btBulletDynamicsCommon.h"
 #include <Qt3DCore/QEntity>
-
 #include <QColor>
 
 class Ground
@@ -32,4 +32,4 @@ private:
 
 };
 
-#endif // CHESSBOARD_H
+#endif // GROUND_H

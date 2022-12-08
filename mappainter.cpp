@@ -1,5 +1,4 @@
 #include "mappainter.h"
-#include <QDebug>
 
 MapPainter::MapPainter(QWidget* parent)
     : QWidget(parent)
@@ -9,7 +8,7 @@ MapPainter::MapPainter(QWidget* parent)
 
 void MapPainter::paintEvent(QPaintEvent* event)
 {
-    this->raise();
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QImage image{mapImage,mapWidth,mapHeight,numberOfBytesPerWidth,QImage::Format_ARGB32};
@@ -25,6 +24,5 @@ void MapPainter::save_map_pointer(LidarMapper* map)
 
     int intSize{sizeof(int)};
     numberOfBytesPerWidth = mapWidth*intSize;
-
 
 }

@@ -8,8 +8,8 @@ LidarMapper::LidarMapper(double maxRange, double width, double height, double re
     logOddsOccup = probability_to_logodds(probabiltyOccup);
 
     gridMap = new OccupancyGrid(width, height, resolution);
-    mapWidth = gridMap->get_x_coords().size()-1;
-    mapHeight = gridMap->get_y_coords().size()-1;
+    numMapCols = gridMap->get_x_coords().size()-1;
+    numMapRows = gridMap->get_y_coords().size()-1;
     imageBuffer.resize(gridMap->get_map().size());
     set_initial_image();
 
@@ -69,7 +69,7 @@ void LidarMapper::set_initial_image()
 
 }
 
-double LidarMapper::percent_seen()
+int LidarMapper::percent_environment_mapped()
 {
     int res = count_if(imageBuffer.begin(), imageBuffer.end(),
                            [this](int i) { return i != initValue; });

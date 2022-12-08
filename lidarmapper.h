@@ -16,10 +16,10 @@ public:
     LidarMapper(double maxRange, double width, double height, double resolution);
     void add_measurements_to_map(const std::pair<Eigen::VectorXd, Eigen::VectorXd>& rayAngleLengthPairs, const VehicleState& state);
     const unsigned char* get_image() const;
-    int get_num_rows() {return mapHeight;}
-    int get_num_cols() {return mapWidth;}
+    int get_num_rows() {return numMapCols;}
+    int get_num_cols() {return numMapRows;}
     void set_initial_image();
-    double percent_seen();
+    int percent_environment_mapped();
 
 private:
     void integrate_cells_along_ray(const std::vector<int>& cellIndices, const VehicleState& state, double rayLength);
@@ -35,8 +35,8 @@ private:
     double logOddsOccup;
     double lidarRange;
     double mapResolution;
-    int mapHeight;
-    int mapWidth;
+    int numMapRows;
+    int numMapCols;
     int initValue;
     std::vector<int> imageBuffer;
 };

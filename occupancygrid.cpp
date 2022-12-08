@@ -26,21 +26,6 @@ std::vector<double> OccupancyGrid::get_map() const
     return logLikelihoodMap;
 }
 
-double OccupancyGrid::get_width() const
-{
-    return width;
-}
-
-double OccupancyGrid::get_height() const
-{
-    return height;
-}
-
-double OccupancyGrid::get_resolution() const
-{
-    return resolution;
-}
-
 int OccupancyGrid::get_cell_index(double x, double y) const
 {
     if (x > width || y > height || y <0 || x < 0) return -1;

@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "dualsensedriver.h"
 #include "ui_mainwindow.h"
+
 #include <Qt3DExtras/qt3dwindow.h>
 #include <Qt3DRender/qpointlight.h>
 #include <Qt3DRender/qcamera.h>
@@ -11,12 +13,7 @@
 #include <Qt3DCore/qtransform.h>
 #include <Qt3DExtras/QPhongMaterial>
 #include <QGridLayout>
-#include <QDebug>
 #include <iostream>
-#include "ds5w.h"
-#include <Windows.h>
-#include <iostream>
-#include "dualsensedriver.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -40,21 +37,22 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete mWorld;
 
 }
+
 void MainWindow::timerEvent(QTimerEvent*)
 {
     mWorld->step();
     update_camera();
     ui->mapWidget->update();
-    ui->progressBar->setValue(mWorld->get_map()->percent_seen());
+    ui->progressBar->setValue(mWorld->get_map()->percent_environment_mapped());
 
-    if(driver.is_available())
+    if(controllerDriver.is_available())
     {
-        VacuumControlState control = driver.get_control();
+        VacuumControlState control = controllerDriver.get_control();
         mWorld->get_vacuum()->controller_drive(control);
     }
-
 
 }
 
@@ -123,17 +121,5 @@ void MainWindow::update_camera()
     double cameraX{currentState.x - 200*cos(currentState.heading)};
     double cameraY{currentState.y - 200*sin(currentState.heading)};
     cameraEntity->setPosition(QVector3D(cameraX, cameraY, 125));
-
-}
-
-void MainWindow::controller()
-{
-        DualSenseDriver driver;
-
-        while(true)
-        {
-            VacuumControlState control = driver.get_control();
-            qInfo() << control.drive;
-        }
 
 }

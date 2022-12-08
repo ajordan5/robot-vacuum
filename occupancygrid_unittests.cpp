@@ -821,7 +821,7 @@ TEST(SimUtilsHeading, GivenIdentityMatrix_ExpectZeroHeading)
     btTransform trans;
     trans.setIdentity();
     double goldenHeading{0};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_EQ(goldenHeading, calculatedHeading);
 }
@@ -833,7 +833,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ_ExpectCorrectHeading)
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, M_PI/10));
     double goldenHeading{M_PI/10};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
@@ -845,7 +845,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ180Degrees_ExpectCorrectHeading)
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, M_PI-.00001));
     double goldenHeading{M_PI};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
@@ -857,7 +857,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZ90Degrees_ExpectCorrectHeading)
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, M_PI_2));
     double goldenHeading{M_PI_2};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
@@ -869,7 +869,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByLargeAngle_ExpectCorrectHeading)
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, 15*M_PI/8));
     double goldenHeading{-M_PI/8};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
@@ -881,7 +881,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByNegativeAngle_ExpectCorrectHeadi
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, -M_PI/8));
     double goldenHeading{-M_PI/8};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }
@@ -893,7 +893,7 @@ TEST(SimUtilsHeading, GivenMatrixRotatedAboutZByLargeNegativeAngle_ExpectCorrect
     btVector3 axis{0,0,1};
     trans.setRotation(btQuaternion(axis, -26*M_PI/8));
     double goldenHeading{3*M_PI_4};
-    double calculatedHeading{heading_of_z_rotation(trans)};
+    double calculatedHeading{get_heading_of_z_rot_matrix(trans)};
 
     EXPECT_NEAR(goldenHeading, calculatedHeading, 0.0001);
 }

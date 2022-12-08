@@ -32,6 +32,8 @@ private:
 
     void setup_physics();
     void setup_graphics();
+    void setup_outer_walls();
+    void setup_inner_walls();
     void set_graphics_positions();
 };
 

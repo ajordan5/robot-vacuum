@@ -20,9 +20,10 @@ public:
     Eigen::VectorXd get_x_coords() const;
     Eigen::VectorXd get_y_coords() const;
     std::vector<double> get_map() const;
-    double get_width() const;
-    double get_height() const;
-    double get_resolution() const;
+    double get_width() const {return width;}
+    double get_height() const {return height;}
+    double get_resolution() const {return resolution;}
+
     void update_likelihood(double value, int index);
     void set_initial_likelihood(double likelihood);
 

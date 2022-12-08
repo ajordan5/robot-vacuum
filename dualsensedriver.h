@@ -3,7 +3,6 @@
 
 #include "ds5w.h"
 #include <Windows.h>
-#include <iostream>
 
 struct VacuumControlState
 {
@@ -28,8 +27,8 @@ private:
     DS5W::DeviceContext context;
 };
 
-double normalize_int(int input);
-double normalize_uint(int input);
-bool is_dead_zone(int input);
+double normalize_analog_stick_int(int input);
+double normalize_trigger_uint(int input);
+bool is_analog_stick_dead_zone(int input);
 
 #endif // DUALSENSEDRIVER_H

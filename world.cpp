@@ -78,10 +78,10 @@ void World::pass_measurements_to_map()
 
 void World::key_press(int key) const
 {
-    mVacuum->drive(key);
+    mVacuum->arrowkey_drive(key);
 }
 
 void World::key_release() const
 {
-    mVacuum->stop();
+    mVacuum->brake_wheels();
 }
