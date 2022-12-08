@@ -15,6 +15,10 @@ This package implements [occupancy grid mapping](https://www.researchgate.net/pr
 
 ![alt text](https://github.com/MEEN-570-Fall-2022/final-project-ajordan5/blob/main/doc/control.JPG)
 
-### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the `keyboard` branch.
+### Dualsense Features
+* Vibration scaled according to robot speed (disable with `L2`)
+* Haptic feedback resistance on turbospeed trigger
 
 **Warning**: Turbo speed is fun, but degrades mapping quality!
+
+### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the `keyboard` branch.
