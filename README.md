@@ -11,4 +11,4 @@ This package implements [occupancy grid mapping](https://www.researchgate.net/pr
   
 ## Controls
 ### If the user wishes to control with only keyboard, checkout and build the `keyboard` branch
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/MEEN-570-Fall-2022/final-project-ajordan5/blob/main/control.JPG)
