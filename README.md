@@ -12,5 +12,9 @@ This package implements [occupancy grid mapping](https://www.researchgate.net/pr
   * Per DualSense-Windows instructions, install and link to `ds5w.lib` and put `ds5w.dll` in your build folder.
   
 ## Controls
-### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the `keyboard` branch
+
 ![alt text](https://github.com/MEEN-570-Fall-2022/final-project-ajordan5/blob/main/doc/control.JPG)
+
+### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the `keyboard` branch.
+
+**Warning**: Turbo speed is fun, but degrades mapping quality!
