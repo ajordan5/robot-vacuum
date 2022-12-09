@@ -6,7 +6,6 @@
 #include <Qt3DCore/qentity.h>
 #include <QKeyEvent>
 #include <Qt3DExtras/qt3dwindow.h>
-#include "dualsensedriver.h"
 #include "world.h"
 
 namespace Ui {
@@ -42,7 +41,6 @@ private:
 
     double timeStep{1/60.0};
     World* mWorld;
-    DualSenseDriver controllerDriver;
 
     Qt3DCore::QEntity *mRootEntity;
     Qt3DExtras::Qt3DWindow* view;

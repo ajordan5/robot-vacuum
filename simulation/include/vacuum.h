@@ -31,7 +31,6 @@ public:
     void update_position();
     std::pair<Eigen::VectorXd, Eigen::VectorXd> update_measurements();
     void arrowkey_drive(int key);
-    void controller_drive(const VacuumControlState& control);
     void brake_wheels();
 
 private:

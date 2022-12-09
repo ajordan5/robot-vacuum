@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "dualsensedriver.h"
 #include "ui_mainwindow.h"
 
 #include <Qt3DExtras/qt3dwindow.h>
@@ -47,12 +46,6 @@ void MainWindow::timerEvent(QTimerEvent*)
     update_camera();
     ui->mapWidget->update();
     ui->progressBar->setValue(mWorld->get_map()->percent_environment_mapped());
-
-    if(controllerDriver.is_available())
-    {
-        VacuumControlState control = controllerDriver.get_control();
-        mWorld->get_vacuum()->controller_drive(control);
-    }
 
 }
 

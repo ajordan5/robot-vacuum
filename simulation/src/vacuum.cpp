@@ -200,20 +200,6 @@ void Vacuum::arrowkey_drive(int key)
 
 }
 
-void Vacuum::controller_drive(const VacuumControlState& control)
-{
-    double rightMotor = control.drive * 15 * (1+control.turbo*5);
-    double leftMotor = control.drive * -15 * (1+control.turbo*5);
-
-    if (control.turn > 0)
-        leftMotor = leftMotor - 7*control.turn;
-    else if (control.turn < 0)
-        rightMotor = rightMotor - 7*control.turn;
-
-    m_joints[0]->enableAngularMotor(true, leftMotor, 50);
-    m_joints[1]->enableAngularMotor(true, rightMotor, 50);
-}
-
 void Vacuum::brake_wheels()
 {
     m_joints[0]->enableAngularMotor(true, 0, 5);
