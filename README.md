@@ -21,4 +21,4 @@ This package implements [occupancy grid mapping](https://www.researchgate.net/pr
 
 **Warning**: Turbo speed is fun, but degrades mapping quality!
 
-### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the `keyboard` branch.
+### The robot can be controlled with either a connected Playstation DualSense controller or keyboard arrowkeys. If the user wishes to control with only keyboard and forgo the DualSense dependency, checkout and build the [`keyboard`](https://github.com/ajordan5/robot-vacuum/blob/keyboard/README.md) branch.
