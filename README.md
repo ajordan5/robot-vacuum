@@ -8,6 +8,7 @@ This package implements [occupancy grid mapping](https://www.researchgate.net/pr
 * [Eigen3](https://eigen.tuxfamily.org/dox/group__TutorialMatrixClass.html)
 * [Bullet3](https://github.com/bulletphysics/bullet3)
 * Qt6 (recommended to build this package with Qt Creator)
+* GTest (optional for unittests, disable with `-DBUILD_TESTS=OFF`
 * [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows) (optional, see below)
   * Per DualSense-Windows instructions, install and link to `ds5w.lib` and put `ds5w.dll` in your build folder.
   
